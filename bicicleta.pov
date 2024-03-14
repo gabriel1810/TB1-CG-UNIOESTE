@@ -41,9 +41,15 @@ global_settings{ assumed_gamma 1.0 }
                             look_at   <0 , 1.0 , 0.0>}
                             
                             
+#declare Camera_pneu_traseiro = camera {angle 15     
+                            location  <0.4 , 0.8 , 8>
+                            right    -x*image_width/image_height
+                            look_at   <0.4 , 0.8 , 0.0>}
+                            
+                            
                                                          
                    
-camera{Camera_0}
+camera{Camera_pneu_traseiro}
 //------------------------------------------------------------------------
 // sun -------------------------------------------------------------------
 light_source{<1500,2500, 2500> color White}
@@ -88,22 +94,20 @@ plane { <0,1,0>, 0    // plane with layered textures
       }       
       
       
-// Rodas
+// Rodas      
 
-#declare roda_traseira = union {
-                                            
-    #declare cor_roda = pigment {color Gray};
-    #declare finish_roda = finish {
-                                ambient 0.1
-                                diffuse 1
-                                reflection 0.002
-                                specular 0.2 
-                                metallic
-                             }
-                             
-                             
-    #declare cor_raio = pigment {color Gray};  
-    
+#declare cor_roda = pigment {color Gray};
+#declare finish_roda = finish {
+                            ambient 0.1
+                            diffuse 1
+                            reflection 0.002
+                            specular 0.2 
+                            metallic
+                         } 
+                         
+#declare cor_raio = pigment {color Gray}; 
+
+#declare roda_traseira = union {               
                       
         // Roda       
         difference{
@@ -131,20 +135,35 @@ plane { <0,1,0>, 0    // plane with layered textures
         }
         
              
-        // Distancia X dos ar0s tem que ser 0.48
+        // Distancia X dos aros tem que ser 0.48                                         
         
-        union {           
-            cylinder {<0.33, 0.8, 0.0>, <-0.15, 0.8, 0>,0.007 texture {pigment { cor_roda } finish { finish_roda}}}
-            cylinder {<-0.13, 0.8, 0.0>,<-0.15, 0.8, 0>,0.015 texture { pigment { cor_roda } finish { finish_roda}}}  
-        }
+               
+        cylinder {<0.35, 0.8, 0.0>, <-0.15, 0.8, 0>,0.007 texture {pigment { cor_roda } finish { finish_roda}}} 
+              
+        cylinder {<0.45, 0.8, 0.0>, <0.95, 0.8, 0>,0.007 texture {pigment { cor_roda } finish { finish_roda}}}
+                                                                                                               
+                                                                                                               
+        
+        cylinder {<0.40, 0.85, 0.0>, <0.40, 1.39, 0>,0.007 texture {pigment { cor_roda } finish { finish_roda}}}
+        
+        cylinder {<0.40, 0.75, 0.0>, <0.40, 0.25, 0>,0.007 texture {pigment { cor_roda } finish { finish_roda}}}
+        
+                                                                                                                  
+                                                                                                                  
+        cylinder {<0.45, 0.825, 0.0>, <0.95, 1.095, 0>,0.007 texture {pigment { cor_roda } finish { finish_roda}}}
+       
+               
+            
+            
+            
+            
+        
+        cylinder {<0.425, 0.85, 0.0>, <0.72, 1.39, 0>,0.007 texture {pigment { cor_roda } finish { finish_roda}}}
+     
+     
         
 
-        
-
-         
-    
-    
-    
+          
     
     
 

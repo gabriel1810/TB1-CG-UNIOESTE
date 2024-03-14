@@ -31,9 +31,25 @@ global_settings{ assumed_gamma 1.0 }
 #declare Camera_1 = camera {angle 15     
                             location  <20.0 , 3.0 , 0.0>
                             right    -x*image_width/image_height
-                            look_at   <-8.0 , 1.0 , 0.0>}                            
+                            look_at   <-8.0 , 1.0 , 0.0>} 
+                            
+                            
+                            
+#declare Camera_2 = camera {angle 15     
+                            location  <15.0 , 1.0 , -15>
+                            right    -x*image_width/image_height
+                            look_at   <0 , 1.0 , 0.0>}
+                            
+                            
+#declare Camera_pneu_traseiro = camera {angle 20     
+                            location  <0.2 , 1.0 , -6>
+                            right    -x*image_width/image_height
+                            look_at   <0.2 , 1.0 , 0.0>}
+                            
+                            
+                                                         
                    
-camera{Camera_0}
+camera{Camera_pneu_traseiro}
 //------------------------------------------------------------------------
 // sun -------------------------------------------------------------------
 light_source{<1500,2500, 2500> color White}
@@ -49,20 +65,6 @@ sky_sphere{ pigment{ gradient <0,1,0>
 //------------------------------------------------------------------------
 
 
-//------------------------------------------------------------------------
-//--------------------- drawing of 3 Axes --------------------------------
-//------------------------------------------------------------------------
-
-#declare Texture_A_Dark  = texture {
-                               pigment{ color rgb<1,0.45,0>}
-                               finish { phong 1}
-                             }
-#declare Texture_A_Light = texture { 
-                               pigment{ color rgb<1,1,1>}
-                               finish { phong 1}
-                             }
-
-//-------------------------------------------------- end of coordinate axes
 
 
 // ground -----------------------------------------------------------------
@@ -91,60 +93,236 @@ plane { <0,1,0>, 0    // plane with layered textures
         rotate<0,0,0>
       }       
       
+      
+// Rodas      
 
-// Rodas  
-         
-// Roda traseira         
-torus { 0.35,0.05  texture { pigment{ color rgb<2,0,0>} finish { phong 1 reflection 0.00} } 
-         scale <2,2,2> rotate<90,0,0> translate<0.5,0.80,0>
- }  
- 
- 
-// Roda dianteira
-torus { 0.35,0.05 texture { pigment{ color rgb<255,0,0>} finish { phong 1 reflection 0.00} }
-        scale <2,2,2> rotate<90,0,0> translate<-3,0.80,0>
- } 
- 
- 
- 
- 
- // Marcador de 0 0 0
-   
-cylinder { <0,0,0>,<0,2,0>, 0.07 texture { pigment { color rgb<0,20,0> }}} 
+#declare cor_roda = pigment {color Gray};
+#declare finish_roda = finish {
+                            ambient 0.1
+                            diffuse 1
+                            reflection 0.002
+                            specular 0.2 
+                            metallic
+                         } 
+                         
+#declare cor_raio = pigment {color Gray}; 
+
+#declare roda_traseira = union {               
+                      
+        // Roda       
+        difference{
+             cylinder {
+                <0.4, 0.8, -0.09>,    // Ponto inicial
+                <0.4, 0.8, 0.09>,  // Ponto final
+                0.61       // Raio
+                texture {
+                    pigment { cor_roda } 
+                    finish { finish_roda}
+                }
+            }
+              
+              
+              cylinder {
+                <0.4, 0.8, -0.095>,    // Ponto inicial
+                <0.4, 0.8, 0.095>,  // Ponto final
+                0.55       // Raio
+                texture {
+                    pigment { cor_roda} 
+                    finish { finish_roda}
+                }
+            }
         
-   
- // Suporte direito roda traseira                                          
-union {    
-  cylinder { <0,0,0>,<0,1.60,0>, 0.06 texture { pigment { color rgb<0,0,0> } finish { phong 0.5 reflection{ 0.00 metallic 0.00} } } 
-             scale <0.6,1,1> rotate<0,0,50> translate<0.5,0.8,0>
-  }   
-         
-  cylinder { <0,0,0>,<0,1.60,0>, 0.06  texture { pigment { color rgb<0,0,0> } finish  { phong 0.5 reflection{ 0.00 metallic 0.00} } } 
-            scale <0.6,1,1> rotate<0,0,90> translate<0.5,0.8,0> } 
-
-  translate<0,0,-0.2>
-}                                          
-                    
+        }
+        
              
-// Suporte esquerdo roda traseira                
-union {    
-  cylinder { <0,0,0.2>,<0,1.60,0>, 0.06 texture { pigment { color rgb<0,0,0> } finish { phong 0.5 reflection{ 0.00 metallic 0.00} } } 
-             scale <0.6,1,1> rotate<0,0,50> translate<0.5,0.8,0>
-  }   
-         
-  cylinder { <0,0,0.2>,<0,1.60,0>, 0.06  texture { pigment { color rgb<0,0,0> } finish  { phong 0.5 reflection{ 0.00 metallic 0.00} } } 
-            scale <0.6,1,1> rotate<0,0,90> translate<0.5,0.8,0> } 
+        // Distancia X dos aros tem que ser 0.48 
+        
+        
+        union{
+               
+        cylinder {<0.33, 0.8, 0.0>, <-0.15, 0.8, 0>,0.007 texture {pigment { cor_roda } finish { finish_roda}}}
+       // cylinder {<-0.13, 0.8, 0.0>,<-0.15, 0.8, 0>,0.015 texture { pigment { cor_roda } finish { finish_roda}}}  
+        
+        }
+        
+        union{
+               
+        cylinder {<0.33, 0.8, 0.0>, <0.33, 1.6, 0>,0.007 texture {pigment { cor_roda } finish { finish_roda}}}
+          
+        
+        }
+     
+     
+        
 
-  translate<0,0,0>
-}         
- 
- 
- 
-// Tubo selim 
-cylinder { <-1.60,0,0>,<-1.1,1.60,0>, 0.09  texture { pigment { color rgb<0,0,0> } finish  { phong 0.5 reflection{ 0.00 metallic 0.00} } } 
-            scale <1,1,1>  translate<0.5,0.8,0> } 
-            
-            
-            
-            
-// Barra central superior
+          
+    
+    
+
+    // Pneu Traseiro        
+    torus {
+        0.35, 0.05
+        texture {
+            pigment { color rgb<0,0,0> }
+            finish {
+                ambient 0.1
+                diffuse 0.2
+                reflection 0.0009 
+            }
+        }
+        scale <2,2,2> rotate <90,0,0> translate <0.4,0.80,0>
+    }  
+
+} 
+  
+
+#declare roda_dianteira = union {
+
+    // Pneu Dianteiro
+    torus {
+    0.35, 0.05
+    texture {
+        pigment { color rgb<0,0,0> }
+        finish {
+            ambient 0.2 
+            diffuse 0.9 
+            reflection 0.01 
+        }
+    }
+    scale <2,2,2> rotate <90,0,0> translate <-2.7,0.80,0>
+    }  
+
+
+}
+
+        
+#declare chassi = union {
+
+    #declare cor_principal = pigment {color Gray}
+    #declare finish_chassi = finish {
+                                ambient 0.1
+                                diffuse 0.9
+                                reflection 0.02
+                                specular 0.2 
+                                metallic
+                             } 
+                             
+          
+    // Suporte direito roda traseira                                          
+    union {     
+      // Parte de cima   
+      cylinder {
+        <-0.035,-0.011,-0.18>, <-0.95,0.80,-0.043>, 0.055
+        texture {
+            pigment { cor_principal } 
+            finish { finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+      }
+    
+      // Parte de baixo
+      cylinder {
+        <-0.01,0,-0.18>, <-1.30,0.02,-0.04>, 0.050
+        texture {
+            pigment { cor_principal } 
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+      }
+      rotate<0,0.5,0>     
+    } 
+    
+    // Suporte esquerdo roda traseira                                          
+    union {     
+      // Parte de cima   
+      cylinder {
+        <-0.035,-0.011,0.18>, <-0.95,0.80,0.04>, 0.055
+        texture {
+            pigment { cor_principal } 
+            finish { finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+      } 
+      // Parte de baixo
+      cylinder {
+        <-0.01,0,0.18>, <-1.30,0.02,0.04>, 0.050
+        texture {
+            pigment { cor_principal } 
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+      }
+      rotate<0,-0.5,0>    
+    } 
+    
+    // Tubo do selim
+    cylinder {
+        <-1.25,0,0>, <-0.9,1.15,0>, 0.09
+        texture {
+            pigment { cor_principal }
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+    }
+       
+    
+    // conexao tubo selim com suportes
+    cylinder {
+        <-1.25,0.05,-0.10>, <-1.25,0.05,0.10>, 0.12
+        texture {
+            pigment { cor_principal }
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+    }
+    
+    
+    // Barra central superior
+    cylinder {
+        <-1.0,0.85,0>, <-2.55,1.50,0>, 0.09
+        texture {
+            pigment { cor_principal }
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+    }   
+    
+    
+    
+    // Barra central Inferior
+    union{
+    cylinder {
+            <-1.25,0.05,0>, <-2.35,1.05,0>, 0.09
+            texture {
+                pigment { cor_principal }
+                finish {finish_chassi}
+            }
+            scale <1,1,1> translate <0.5,0.8,0>
+        }  
+        
+    
+        cylinder {
+            <-2.30,1.01,0>, <-2.65,1.25,0>, 0.09
+            texture {
+                pigment { cor_principal }
+                finish {finish_chassi}
+            }
+            scale <1,1,1> translate <0.5,0.8,0>
+        }
+    } 
+    
+    // Conexao guidao-suspensao
+    cylinder {
+        <-2.70,1.05,0>, <-2.48,1.60,0>, 0.1
+        texture {
+            pigment { cor_principal }
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+    }
+}
+
+
+//chassi
+roda_traseira
+//roda_dianteira

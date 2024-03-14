@@ -1,4 +1,4 @@
- // PoVRay 3.7 Scene File " ... .pov"
+                                         // PoVRay 3.7 Scene File " ... .pov"
 // author:  ...
 // date:    ...
 //------------------------------------------------------------------------
@@ -31,17 +31,7 @@ global_settings{ assumed_gamma 1.0 }
 #declare Camera_1 = camera {angle 15     
                             location  <20.0 , 3.0 , 0.0>
                             right    -x*image_width/image_height
-                            look_at   <-8.0 , 1.0 , 0.0>} 
-                            
-                            
-                            
-#declare Camera_2 = camera {angle 15     
-                            location  <15.0 , 1.0 , -15>
-                            right    -x*image_width/image_height
-                            look_at   <0 , 1.0 , 0.0>}
-                            
-                            
-                                                         
+                            look_at   <-8.0 , 1.0 , 0.0>}                            
                    
 camera{Camera_0}
 //------------------------------------------------------------------------
@@ -58,8 +48,8 @@ sky_sphere{ pigment{ gradient <0,1,0>
            } // end of sky_sphere 
 //------------------------------------------------------------------------
 
-
-
+                                                                          
+                                                                          
 
 // ground -----------------------------------------------------------------
 //---------------------------------<<< settings of squared plane dimensions
@@ -78,113 +68,8 @@ sky_sphere{ pigment{ gradient <0,1,0>
  #end// of Raster(RScale, HLine)-macro    
 //-------------------------------------------------------------------------
     
-
-plane { <0,1,0>, 0    // plane with layered textures
-        texture { pigment{color White*1.1}
-                  finish {ambient 0.45 diffuse 0.85}}
-        texture { Raster(RasterScale,RasterHalfLine ) rotate<0,0,0> }
-        texture { Raster(RasterScale,RasterHalfLineZ) rotate<0,90,0>}
-        rotate<0,0,0>
-      }       
-      
-      
-// Rodas
-
-#declare roda_traseira = union {
-                                            
-    #declare cor_roda = pigment {color Gray};
-    #declare finish_roda = finish {
-                                ambient 0.1
-                                diffuse 1
-                                reflection 0.002
-                                specular 0.2 
-                                metallic
-                             }
-                             
-                             
-    #declare cor_raio = pigment {color Gray};  
-    
-                      
-        // Roda       
-        difference{
-             cylinder {
-                <0.4, 0.8, -0.09>,    // Ponto inicial
-                <0.4, 0.8, 0.09>,  // Ponto final
-                0.61       // Raio
-                texture {
-                    pigment { cor_roda } 
-                    finish { finish_roda}
-                }
-            }
-              
-              
-              cylinder {
-                <0.4, 0.8, -0.095>,    // Ponto inicial
-                <0.4, 0.8, 0.095>,  // Ponto final
-                0.55       // Raio
-                texture {
-                    pigment { cor_roda} 
-                    finish { finish_roda}
-                }
-            }
-        
-        }
-        
-             
-        // Distancia X dos ar0s tem que ser 0.48
-        
-        union {           
-            cylinder {<0.33, 0.8, 0.0>, <-0.15, 0.8, 0>,0.007 texture {pigment { cor_roda } finish { finish_roda}}}
-            cylinder {<-0.13, 0.8, 0.0>,<-0.15, 0.8, 0>,0.015 texture { pigment { cor_roda } finish { finish_roda}}}  
-        }
-        
-
-        
-
-         
-    
-    
-    
-    
     
 
-    // Pneu Traseiro        
-    torus {
-        0.35, 0.05
-        texture {
-            pigment { color rgb<0,0,0> }
-            finish {
-                ambient 0.1
-                diffuse 0.2
-                reflection 0.0009 
-            }
-        }
-        scale <2,2,2> rotate <90,0,0> translate <0.4,0.80,0>
-    }  
-
-} 
-  
-
-#declare roda_dianteira = union {
-
-    // Pneu Dianteiro
-    torus {
-    0.35, 0.05
-    texture {
-        pigment { color rgb<0,0,0> }
-        finish {
-            ambient 0.2 
-            diffuse 0.9 
-            reflection 0.01 
-        }
-    }
-    scale <2,2,2> rotate <90,0,0> translate <-2.7,0.80,0>
-    }  
-
-
-}
-
-        
 #declare chassi = union {
 
     #declare cor_principal = pigment {color Gray}
@@ -221,7 +106,7 @@ plane { <0,1,0>, 0    // plane with layered textures
       rotate<0,0.5,0>     
     } 
     
-    // Suporte esquerdo roda traseira                                          
+   // Suporte esquerdo roda traseira                                          
     union {     
       // Parte de cima   
       cylinder {
@@ -243,9 +128,9 @@ plane { <0,1,0>, 0    // plane with layered textures
       }
       rotate<0,-0.5,0>    
     } 
-    
-    // Tubo do selim
-    cylinder {
+
+   // Tubo do selim
+   cylinder {
         <-1.25,0,0>, <-0.9,1.15,0>, 0.09
         texture {
             pigment { cor_principal }
@@ -254,7 +139,7 @@ plane { <0,1,0>, 0    // plane with layered textures
         scale <1,1,1> translate <0.5,0.8,0>
     }
        
-    
+
     // conexao tubo selim com suportes
     cylinder {
         <-1.25,0.05,-0.10>, <-1.25,0.05,0.10>, 0.12
@@ -264,8 +149,8 @@ plane { <0,1,0>, 0    // plane with layered textures
         }
         scale <1,1,1> translate <0.5,0.8,0>
     }
-    
-    
+
+
     // Barra central superior
     cylinder {
         <-1.0,0.85,0>, <-2.55,1.50,0>, 0.09
@@ -275,9 +160,9 @@ plane { <0,1,0>, 0    // plane with layered textures
         }
         scale <1,1,1> translate <0.5,0.8,0>
     }   
-    
-    
-    
+
+
+
     // Barra central Inferior
     union{
     cylinder {
@@ -289,7 +174,7 @@ plane { <0,1,0>, 0    // plane with layered textures
             scale <1,1,1> translate <0.5,0.8,0>
         }  
         
-    
+
         cylinder {
             <-2.30,1.01,0>, <-2.65,1.25,0>, 0.09
             texture {
@@ -299,7 +184,7 @@ plane { <0,1,0>, 0    // plane with layered textures
             scale <1,1,1> translate <0.5,0.8,0>
         }
     } 
-    
+
     // Conexao guidao-suspensao
     cylinder {
         <-2.70,1.05,0>, <-2.48,1.60,0>, 0.1
@@ -309,9 +194,17 @@ plane { <0,1,0>, 0    // plane with layered textures
         }
         scale <1,1,1> translate <0.5,0.8,0>
     }
-}
+}    
 
 
-//chassi
-roda_traseira
-//roda_dianteira
+chassi
+    
+      
+      
+      
+      
+    
+           
+
+
+       

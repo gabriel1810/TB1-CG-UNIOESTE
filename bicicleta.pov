@@ -53,9 +53,22 @@ global_settings{ assumed_gamma 1.0 }
                             look_at   <-1.5 , 0.8 , 0.0>}
                             
                             
+#declare Camera_amortecedor = camera {angle 30     
+                            location  <-2.4 , 1.35 , 10>
+                            right    -x*image_width/image_height
+                            look_at   <-2.4 , 1.35 , 0.0>}
+                            
+                            
+#declare Camera_frente_amortecedor = camera {angle 20     
+                            location  <-15 , 8 , 0>
+                            right    -x*image_width/image_height
+                            look_at   <-2.4 , 1.3 , 0.0>}
+                            
+                            
+                            
                                                          
                    
-camera{Camera_0}
+camera{Camera_amortecedor}
 //------------------------------------------------------------------------
 // sun -------------------------------------------------------------------
 light_source{<1500,2500, 2500> color White}
@@ -247,7 +260,7 @@ sky_sphere{ pigment{ gradient <0,1,0>
             
                                                                                           
                      
-            //Aros roda traseira
+            //Aros roda dianteira
             union {
             
                 union{ 
@@ -317,7 +330,7 @@ sky_sphere{ pigment{ gradient <0,1,0>
             scale <1.85,1.85,1.85> rotate <90,0,0>
         }
         
-        translate <-2.7,0.80,0>
+        translate <-2.6,0.80,0>
             
 } 
   
@@ -327,7 +340,7 @@ sky_sphere{ pigment{ gradient <0,1,0>
         
 #declare chassi = union {
 
-    #declare cor_principal = pigment {color Gray}
+    #declare cor_principal = pigment {color Red}
     #declare finish_chassi = finish {
                                 ambient 0.1
                                 diffuse 0.9
@@ -449,9 +462,19 @@ sky_sphere{ pigment{ gradient <0,1,0>
         }
         scale <1,1,1> translate <0.5,0.8,0>
     }
+} 
+
+
+#declare amortecedor = union{
+ 
+ 
+ 
+ 
+ 
 }
 
 
 chassi
 roda_traseira
 roda_dianteira
+amortecedor

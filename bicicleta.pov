@@ -81,7 +81,7 @@ global_settings{ assumed_gamma 1.0 }
                             
                                                          
                    
-camera{Camera_diagonal_traseira_esquerda}
+camera{Camera_0}
 //------------------------------------------------------------------------
 // sun -------------------------------------------------------------------
 light_source{<1500,2500, 2500> color White}
@@ -344,9 +344,9 @@ sky_sphere{ pigment{ gradient <0,1,0>
      
 
   #declare roda_toda = merge{
-            object {roda}
-            object {aros}
-            object{pneu translate<0,0,ini_lado_dirr+0.05>} 
+            object {roda  scale <0.75,0.75,0.75>}
+            object {aros  scale <0.75,0.75,0.75>}
+            object{pneu translate<0,0,ini_lado_dirr+0.05>  scale <0.75,0.75,0.75>} 
             object {disco_freio translate<0,0,ini_lado_esq+0.05>} 
   }                        
      
@@ -359,140 +359,78 @@ sky_sphere{ pigment{ gradient <0,1,0>
 } 
 
 #declare roda_dianteira = union {    
-       object{roda_toda translate<-2.65,0.8,-0.1>}      
+       object{roda_toda translate<-2.65,0.8,-0.1> }      
 } 
   
 
 
 
+#declare chassi = merge{
+     #declare grossuraTubosRodaTraseira = 0.04 ;
+     #declare tamBarraSuporteRoda = 0.75; 
+     #declare espacamentoSuporteRoda = 0.19;
+     
+     #declare cor_principal = pigment {color Green}
+     #declare finish_chassi = finish { ambient 0.1 diffuse 0.9 reflection 0.05 specular 0.2 metallic} 
+         
+      // Suporte Esquerdo roda traseira     
+      difference{    
+           merge{
+              cylinder { <0,0,0>, <-(tamBarraSuporteRoda+0.05),0,0>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+              cylinder { <0,0,0>, <-tamBarraSuporteRoda,0,0>, grossuraTubosRodaTraseira }
+              sphere { <0,0,0>, 0.0395}
+              cylinder {<-tamBarraSuporteRoda+0.02,0,0.005>, <-tamBarraSuporteRoda-0.18,0,-0.105>, grossuraTubosRodaTraseira rotate<0,0,0> }
+              cylinder {<-tamBarraSuporteRoda-0.03,0,0.0045>, <-tamBarraSuporteRoda-0.36,0,-0.13>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+           }
+           
+           cylinder {<0, 0, -10>, <0, 0, 10>, 0.032 translate <-0.03,0.015,0> }
+           rotate <0,-3,0> translate<0.03,-0.012,espacamentoSuporteRoda>
+      }
         
-#declare chassi = union {
+      // Suporte lado Direito
+      difference{    
+           merge{
+              cylinder { <0,0,0>, <-(tamBarraSuporteRoda+0.05),0,0>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+              cylinder { <0,0,0>, <-tamBarraSuporteRoda,0,0>, grossuraTubosRodaTraseira }
+              sphere { <0,0,0>, 0.0395} 
+              cylinder {<-tamBarraSuporteRoda+0.02,0,0.005>, <-tamBarraSuporteRoda-0.18,0,0.105>, grossuraTubosRodaTraseira rotate<0,0,0> }
+              cylinder {<-tamBarraSuporteRoda-0.03,0,-0.003>, <-tamBarraSuporteRoda-0.36,0,0.13>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+             }
+           
+           cylinder {<0, 0, -10>, <0, 0, 10>, 0.032 translate <-0.03,0.015,0> }
+           rotate <0,3,0>  translate<0.03,-0.012,-espacamentoSuporteRoda>
+      }      
+      
+    
+       // Tubo do selim
+       merge{
+           cylinder {  <0,0,-0.12>, <0,0,0.12>, 0.1  }
+           cylinder { <0,0.05,0>, <0,0.9,0>, 0.07  rotate <0,0,-15>}  
+           translate <-tamBarraSuporteRoda-0.18,0,0>
+       }    
+         
+       merge{  
 
-    #declare cor_principal = pigment {color Green}
-    #declare finish_chassi = finish {
-                                ambient 0.1
-                                diffuse 0.9
-                                reflection 0.02
-                                specular 0.2 
-                                metallic
-                             } 
-                             
+           // Barra central superior
+           cylinder { <0,0,0>, <1.3,0,0>, grossuraTubosRodaTraseira rotate<0,0,165> translate <-tamBarraSuporteRoda,0.7,0>}   
+           
+           // Barra central inferior  
+           cylinder { <0,0,0>, <1.15,0,0>, grossuraTubosRodaTraseira rotate<0,0,-220> translate <-tamBarraSuporteRoda-0.18,0,0>}
+           cylinder { <0,0,0>, <0.25,0,0>, grossuraTubosRodaTraseira rotate<0,0,155> translate <-1.78,0.718,0>}
+               
+           // Conexao guidao-chassi-amortecedor   
+           cylinder { <0,0.5,0>, <0,0.9,0>, 0.07  rotate <0,0,-15> translate <-2.2,0.25,0>}                                                        
+        }
           
-    // Suporte direito roda traseira                                          
-    union {     
-      // Parte de cima   
-      cylinder {
-        <-0.035,-0.011,-0.18>, <-0.95,0.80,-0.043>, 0.055
+                           
         texture {
-            pigment { cor_principal } 
-            finish { finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-      }
-    
-      // Parte de baixo
-      cylinder {
-        <-0.01,0,-0.18>, <-1.30,0.02,-0.04>, 0.050
-        texture {
-            pigment { cor_principal } 
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-      }
-      rotate<0,0.5,0>     
-    } 
-    
-    // Suporte esquerdo roda traseira                                          
-    union {     
-      // Parte de cima   
-      cylinder {
-        <-0.035,-0.011,0.18>, <-0.95,0.80,0.04>, 0.055
-        texture {
-            pigment { cor_principal } 
-            finish { finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-      } 
-      // Parte de baixo
-      cylinder {
-        <-0.01,0,0.18>, <-1.30,0.02,0.04>, 0.050
-        texture {
-            pigment { cor_principal } 
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-      }
-      rotate<0,-0.5,0>    
-    } 
-    
-    // Tubo do selim
-    cylinder {
-        <-1.25,0,0>, <-0.9,1.15,0>, 0.09
-        texture {
-            pigment { cor_principal }
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-    }
-       
-    
-    // conexao tubo selim com suportes
-    cylinder {
-        <-1.25,0.05,-0.10>, <-1.25,0.05,0.10>, 0.12
-        texture {
-            pigment { cor_principal }
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-    }
-    
-    
-    // Barra central superior
-    cylinder {
-        <-1.0,0.85,0>, <-2.55,1.50,0>, 0.080
-        texture {
-            pigment { cor_principal }
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-    }   
-    
-    
-    
-    // Barra central Inferior
-    union{
-    cylinder {
-            <-1.25,0.05,0>, <-2.35,1.05,0>, 0.08
-            texture {
                 pigment { cor_principal }
                 finish {finish_chassi}
-            }
-            scale <1,1,1> translate <0.5,0.8,0>
-        }  
-        
-    
-        cylinder {
-            <-2.30,1.01,0>, <-2.65,1.25,0>, 0.080
-            texture {
-                pigment { cor_principal }
-                finish {finish_chassi}
-            }
-            scale <1,1,1> translate <0.5,0.8,0>
-        }
-    } 
-    
-    // Conexao guidao-suspensao
-    cylinder {
-        <-2.70,1.05,0>, <-2.48,1.60,0>, 0.09
-        texture {
-            pigment { cor_principal }
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-    }
-}  
+        }       
+} 
 
- 
+        
+
  
 
 #declare amortecedor = union{
@@ -611,7 +549,9 @@ sky_sphere{ pigment{ gradient <0,1,0>
 }
 
 
-chassi
-roda_traseira
-roda_dianteira
-amortecedor
+object {chassi translate<0.438,0.8,0>}
+object {roda_traseira }
+object {roda_dianteira translate<0.8,0,0> }
+object {amortecedor}
+
+

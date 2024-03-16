@@ -18,70 +18,57 @@ global_settings{ assumed_gamma 1.0 }
 #include "functions.inc"
 #include "math.inc"
 #include "transforms.inc"
-//--------------------------------------------------------------------------  right handed, y up 
+
 
                             // Visao lado esquerdo
 #declare Camera_0 = camera {/*ultra_wide_angle*/ angle 15      
-                            location  <0.0 , 1.0 , 40.0>
+                            location  <0.45,0.8,10>
                             right    -x*image_width/image_height
-                            look_at   <0.0 , 1.0 , 0.0>}        
+                            look_at   <0.45,0.8,0>}        
                             
                             
                             //Visao traseira
 #declare Camera_1 = camera {angle 30     
-                            location  <20.0 , 2.0 , 0.0>
+                            location  <8.0 , 1.0 , 0.0>
                             right    -x*image_width/image_height
-                            look_at   <-8.0 , 1.0 , 0.0>} 
+                            look_at   <-8.0 , 0.8 , 0.0>} 
                             
-                            
-                            
-#declare Camera_2 = camera {angle 15     
-                            location  <15.0 , 1.0 , -15>
+                                     
+                                     // Visao dalo direito
+#declare Camera_dir = camera {/*ultra_wide_angle*/ angle 15      
+                            location  <0.0 , 1.0 , -20.0>
                             right    -x*image_width/image_height
-                            look_at   <0 , 1.0 , 0.0>}
+                            look_at   <0.0 , 1.0 , 0.0>}
                             
                             
-#declare Camera_diagonal_traseira_esquerda = camera {angle 15     
-                            location  <15.0 , 1.0 , 15>
+#declare camera_0_0_0_traseira = camera {/*ultra_wide_angle*/ angle 20      
+                            location  <10.0 , 3 , 0>
                             right    -x*image_width/image_height
-                            look_at   <0 , 1.0 , 0.0>}
+                            look_at   <0 , 0 , 0>}
                             
-                            
-#declare Camera_pneu_traseiro = camera {angle 15     
-                            location  <0.4 , 0.8 , 15>
+#declare camera_0_0_0_esquerda = camera {/*ultra_wide_angle*/ angle 15      
+                            location  <-0.5 , 0.8 , 15>
                             right    -x*image_width/image_height
-                            look_at   <0.4 , 0.8 , 0.0>}
+                            look_at   <-0.5 , 0.8 , 0>}            
                             
-                            
-#declare Camera_pneu_dianteiro = camera {angle 15     
-                            location  <-1.5 , 0.8 , 15>
+#declare camera_0_0_0_direita = camera {/*ultra_wide_angle*/ angle 15      
+                            location  <0 , 0 , -15>
                             right    -x*image_width/image_height
-                            look_at   <-1.5 , 0.8 , 0.0>}
-                            
-                            
-#declare Camera_amortecedor = camera {angle 35     
-                            location  <-2.4 , 1.35 , 10>
+                            look_at   <0 , 0 , 0>}                                                             
+                                                                
+#declare camera_0_0_0_frente = camera {/*ultra_wide_angle*/ angle 20      
+                            location  <-10.0 , 0 , 0>
                             right    -x*image_width/image_height
-                            look_at   <-2.4 , 1.35 , 0.0>}
+                            look_at   <0 , 0 , 0>}
                             
-                            
-#declare Camera_frente_amortecedor = camera {angle 15     
-                            location  <-15 , 8 , 0>
+#declare camera_0_0_0_cima = camera {/*ultra_wide_angle*/ angle 20      
+                            location  <-0 , 15 , 0>
                             right    -x*image_width/image_height
-                            look_at   <-2.4 , 1.3 , 0.0>} 
-                            
-                            
-                            
-#declare Camera_centro_roda_dianteira = camera {angle 15     
-                            location  <5 , 0.8 , 3>
-                            right    -x*image_width/image_height
-                            look_at   <-1.5 , 0.8 , 0.0>}
-                            
-                            
-                            
-                                                         
-                   
-camera{Camera_diagonal_traseira_esquerda}
+                            look_at   <0 , 0 , 0>}                            
+                                                                                                                
+                                       
+                                       
+camera{camera_0_0_0_esquerda }
 //------------------------------------------------------------------------
 // sun -------------------------------------------------------------------
 light_source{<1500,2500, 2500> color White}
@@ -95,12 +82,9 @@ sky_sphere{ pigment{ gradient <0,1,0>
                      scale 2 }
            } // end of sky_sphere 
 //------------------------------------------------------------------------
-
-
-
-
 // ground -----------------------------------------------------------------
 //---------------------------------<<< settings of squared plane dimensions
+
 #declare RasterScale = 1.0;
 #declare RasterHalfLine  = 0.035;  
 #declare RasterHalfLineZ = 0.035; 
@@ -113,21 +97,145 @@ sky_sphere{ pigment{ gradient <0,1,0>
                           [1-HLine color rgbt<1,1,1,1>]
                           [1-HLine color rgbt<1,1,1,0>*0.6]
                           [1.000   color rgbt<1,1,1,0>*0.6]} }
- #end// of Raster(RScale, HLine)-macro    
-//-------------------------------------------------------------------------
+ #end// of Raster(RScale, HLine)-macro  
+
+ #declare cor_principal = pigment {color Green}
+    #declare finish_chassi = finish {
+                                ambient 0.1
+                                diffuse 0.9
+                                reflection 0.02
+                                specular 0.2 
+                                metallic
+                             } 
+                             
+
+#declare chassi = union {
+                             
+     #declare grossuraTubosRodaTraseira = 0.04 ;   
+    // Suporte direito roda traseira                                          
+    union {     
+      // Parte de cima   
+      cylinder {
+        <-0.035,-0.011,-0.18>, <-0.95,0.80,-0.043>, grossuraTubosRodaTraseira
+        texture {
+            pigment { cor_principal } 
+            finish { finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+      }
     
+      // Parte de baixo
+      cylinder {
+        <-0.01,0,-0.18>, <-1.30,0.02,-0.04>, grossuraTubosRodaTraseira
+        texture {
+            pigment { cor_principal } 
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+      }
+      rotate<0,0.5,0>     
+    }  
+    
+    // Suporte esquerdo roda traseira                                          
+    union {     
+      // Parte de cima   
+      cylinder {
+        <-0.035,-0.011,0.18>, <-0.95,0.80,0.04>, 0.055
+        texture {
+            pigment { cor_principal } 
+            finish { finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+      } 
+      // Parte de baixo
+      cylinder {
+        <-0.01,0,0.18>, <-1.30,0.02,0.04>, 0.050
+        texture {
+            pigment { cor_principal } 
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+      }
+      rotate<0,-0.5,0>    
+    } 
+    
+    
+    
+    
+    
+    
+    
+    // Tubo do selim
+    cylinder {
+        <-1.25,0,0>, <-0.9,1.15,0>, 0.09
+        texture {
+            pigment { cor_principal }
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+    }
+       
+    
+    // conexao tubo selim com suportes
+    cylinder {
+        <-1.25,0.05,-0.10>, <-1.25,0.05,0.10>, 0.12
+        texture {
+            pigment { cor_principal }
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+    }
+    
+    
+    // Barra central superior
+    cylinder {
+        <-1.0,0.85,0>, <-2.55,1.50,0>, 0.080
+        texture {
+            pigment { cor_principal }
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+    }   
+    
+    
+    
+    // Barra central Inferior
+    union{
+    cylinder {
+            <-1.25,0.05,0>, <-2.35,1.05,0>, 0.08
+            texture {
+                pigment { cor_principal }
+                finish {finish_chassi}
+            }
+            scale <1,1,1> translate <0.5,0.8,0>
+        }  
+        
+    
+        cylinder {
+            <-2.30,1.01,0>, <-2.65,1.25,0>, 0.080
+            texture {
+                pigment { cor_principal }
+                finish {finish_chassi}
+            }
+            scale <1,1,1> translate <0.5,0.8,0>
+        }
+    } 
+    
+    // Conexao guidao-suspensao
+    cylinder {
+        <-2.70,1.05,0>, <-2.48,1.60,0>, 0.09
+        texture {
+            pigment { cor_principal }
+            finish {finish_chassi}
+        }
+        scale <1,1,1> translate <0.5,0.8,0>
+    }
+    
+}  
 
-//plane { <0,1,0>, 0    // plane with layered textures
-//        texture { pigment{color White*1.1}
-//                  finish {ambient 0.45 diffuse 0.85}}
-//        texture { Raster(RasterScale,RasterHalfLine ) rotate<0,0,0> }
-//        texture { Raster(RasterScale,RasterHalfLineZ) rotate<0,90,0>}
-//        rotate<0,0,0>
-//      }       
-      
-      
-// Rodas      
 
+
+// APAGAR
 #declare cor_roda = pigment {color rgb<1.1,1.1,1.1>};
 #declare finish_roda = finish {
                             ambient 0.1
@@ -344,274 +452,88 @@ sky_sphere{ pigment{ gradient <0,1,0>
      
 
   #declare roda_toda = merge{
-            object {roda}
-            object {aros}
-            object{pneu translate<0,0,ini_lado_dirr+0.05>} 
-            object {disco_freio translate<0,0,ini_lado_esq+0.05>} 
-  }                        
+            object {roda translate<0,0,-(ini_lado_dirr+0.05)>}
+            object {aros translate<0,0,-(ini_lado_dirr+0.05)>}
+            object {pneu} 
+            object {disco_freio translate<0,0,0.12>} 
+  } 
+    
+  #declare roda_traseira = union { 
+         object{roda_toda }
+            
+} 
+    
+   
+   
+#declare chassi = merge{
+     #declare grossuraTubosRodaTraseira = 0.04 ;
+     #declare tamBarraSuporteRoda = 0.75; 
+     #declare espacamentoSuporteRoda = 0.19;
      
-
-
-
-#declare roda_traseira = union { 
-         object{roda_toda translate<0.45,0.8,-0.1>}
-            
-} 
-
-#declare roda_dianteira = union {    
-       object{roda_toda translate<-2.65,0.8,-0.1>}      
-} 
-  
-
-
-
-        
-#declare chassi = union {
-
-    #declare cor_principal = pigment {color Green}
-    #declare finish_chassi = finish {
-                                ambient 0.1
-                                diffuse 0.9
-                                reflection 0.02
-                                specular 0.2 
-                                metallic
-                             } 
-                             
-          
-    // Suporte direito roda traseira                                          
-    union {     
-      // Parte de cima   
-      cylinder {
-        <-0.035,-0.011,-0.18>, <-0.95,0.80,-0.043>, 0.055
-        texture {
-            pigment { cor_principal } 
-            finish { finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-      }
-    
-      // Parte de baixo
-      cylinder {
-        <-0.01,0,-0.18>, <-1.30,0.02,-0.04>, 0.050
-        texture {
-            pigment { cor_principal } 
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-      }
-      rotate<0,0.5,0>     
-    } 
-    
-    // Suporte esquerdo roda traseira                                          
-    union {     
-      // Parte de cima   
-      cylinder {
-        <-0.035,-0.011,0.18>, <-0.95,0.80,0.04>, 0.055
-        texture {
-            pigment { cor_principal } 
-            finish { finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-      } 
-      // Parte de baixo
-      cylinder {
-        <-0.01,0,0.18>, <-1.30,0.02,0.04>, 0.050
-        texture {
-            pigment { cor_principal } 
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-      }
-      rotate<0,-0.5,0>    
-    } 
-    
-    // Tubo do selim
-    cylinder {
-        <-1.25,0,0>, <-0.9,1.15,0>, 0.09
-        texture {
-            pigment { cor_principal }
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-    }
-       
-    
-    // conexao tubo selim com suportes
-    cylinder {
-        <-1.25,0.05,-0.10>, <-1.25,0.05,0.10>, 0.12
-        texture {
-            pigment { cor_principal }
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-    }
-    
-    
-    // Barra central superior
-    cylinder {
-        <-1.0,0.85,0>, <-2.55,1.50,0>, 0.080
-        texture {
-            pigment { cor_principal }
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-    }   
-    
-    
-    
-    // Barra central Inferior
-    union{
-    cylinder {
-            <-1.25,0.05,0>, <-2.35,1.05,0>, 0.08
-            texture {
-                pigment { cor_principal }
-                finish {finish_chassi}
-            }
-            scale <1,1,1> translate <0.5,0.8,0>
-        }  
-        
-    
-        cylinder {
-            <-2.30,1.01,0>, <-2.65,1.25,0>, 0.080
-            texture {
-                pigment { cor_principal }
-                finish {finish_chassi}
-            }
-            scale <1,1,1> translate <0.5,0.8,0>
-        }
-    } 
-    
-    // Conexao guidao-suspensao
-    cylinder {
-        <-2.70,1.05,0>, <-2.48,1.60,0>, 0.09
-        texture {
-            pigment { cor_principal }
-            finish {finish_chassi}
-        }
-        scale <1,1,1> translate <0.5,0.8,0>
-    }
-}  
-
- 
- 
-
-#declare amortecedor = union{
-
-    #declare cor_amortecedor1 = pigment {color Gray}
-    #declare cor_amortecedor2 = pigment {color Black}
-    
-    #declare finish_amortecedor = finish {
-                                ambient 0.1
-                                diffuse 0.9
-                                reflection 0.05
-                                specular 0.2 
-                                metallic
-                             }    
-                             
-                             
+     #declare cor_principal = pigment {color Green}
+     #declare finish_chassi = finish { ambient 0.1 diffuse 0.9 reflection 0.05 specular 0.2 metallic} 
+         
+      // Suporte Esquerdo roda traseira     
+      difference{    
+           merge{
+              cylinder { <0,0,0>, <-(tamBarraSuporteRoda+0.05),0,0>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+              cylinder { <0,0,0>, <-tamBarraSuporteRoda,0,0>, grossuraTubosRodaTraseira }
+              sphere { <0,0,0>, 0.0395}
+              cylinder {<-tamBarraSuporteRoda+0.02,0,0.005>, <-tamBarraSuporteRoda-0.18,0,-0.105>, grossuraTubosRodaTraseira rotate<0,0,0> }
+              cylinder {<-tamBarraSuporteRoda-0.03,0,0.0045>, <-tamBarraSuporteRoda-0.36,0,-0.13>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+           }
            
-       union {
-       
-           cylinder {
-                <-2.70,1.05,0>, <-2.718,1,0>, 0.05
-                texture {
-                    pigment { cor_amortecedor2 }
-                    finish {finish_amortecedor}
-                }
-                scale <1,1,1> translate <0.5,0.8,0>
-            }      
+           cylinder {<0, 0, -10>, <0, 0, 10>, 0.032 translate <-0.03,0.015,0> }
+           rotate <0,-3,0> translate<0.03,-0.012,espacamentoSuporteRoda>
+      }
+        
+      // Suporte lado Direito
+      difference{    
+           merge{
+              cylinder { <0,0,0>, <-(tamBarraSuporteRoda+0.05),0,0>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+              cylinder { <0,0,0>, <-tamBarraSuporteRoda,0,0>, grossuraTubosRodaTraseira }
+              sphere { <0,0,0>, 0.0395} 
+              cylinder {<-tamBarraSuporteRoda+0.02,0,0.005>, <-tamBarraSuporteRoda-0.18,0,0.105>, grossuraTubosRodaTraseira rotate<0,0,0> }
+              cylinder {<-tamBarraSuporteRoda-0.03,0,-0.003>, <-tamBarraSuporteRoda-0.36,0,0.13>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+             }
+           
+           cylinder {<0, 0, -10>, <0, 0, 10>, 0.032 translate <-0.03,0.015,0> }
+           rotate <0,3,0>  translate<0.03,-0.012,-espacamentoSuporteRoda>
+      }      
+      
     
-             cylinder {
-                <-2.729,0.98,-0.2>, <-2.729,0.98,0.2>, 0.048
-                texture {
-                    pigment { cor_amortecedor2 }
-                    finish {finish_amortecedor}
-                }
-                scale <1,1,1> translate <0.5,0.8,0>
-            }
-       
-       }
-        
-        
-        // Amortecedor direito
-        union{
-        
-        // Conexao guidao-amortecedor
-           sphere { <-2.7225,0.995,0.22>, 0.04 
-           texture { pigment{ cor_amortecedor2}
-                      finish { finish_amortecedor}
-                    } 
-    
-              scale<1,1,1>  rotate<0,0,0>  translate<0.5,0.8,0>  
-           } 
-                  
-                  
-        cylinder {
-                <-2.7225,1,0.22>, <-2.92,0.5,0.22>, 0.042
-                texture {
-                    pigment { cor_amortecedor2 }
-                    finish {finish_amortecedor}
-                }
-                scale <1,1,1> translate <0.5,0.8,0>
-            }
-            
-             
-            // Amortecedor
-            cylinder {
-                    <-2.82,0.75,0.22>, <-3.14,0,0.22>, 0.05
-                    texture {
-                        pigment { cor_amortecedor1 }
-                        finish {finish_amortecedor}
-                    }
-                    scale <1,1,1> translate <0.5,0.8,0>
-                }
-        
-          translate <0,0.01,-0.015>
-        }        
-        
-        
-        
-        // Amortecedor esquerdo 
-               union{
-        
-        // Conexao guidao-amortecedor
-           sphere { <-2.7225,0.995,0.22>, 0.04 
-           texture { pigment{ cor_amortecedor2}
-                      finish { finish_amortecedor}
-                    } 
-    
-              scale<1,1,1>  rotate<0,0,0>  translate<0.5,0.8,0>  
-           } 
-                  
-                  
-        cylinder {
-                <-2.7225,1,0.22>, <-2.92,0.5,0.22>, 0.042
-                texture {
-                    pigment { cor_amortecedor2 }
-                    finish {finish_amortecedor}
-                }
-                scale <1,1,1> translate <0.5,0.8,0>
-            }
-            
-             
-            // Amortecedor
-            cylinder {
-                    <-2.82,0.75,0.22>, <-3.14,0,0.22>, 0.05
-                    texture {
-                        pigment { cor_amortecedor1 }
-                        finish {finish_amortecedor}
-                    }
-                    scale <1,1,1> translate <0.5,0.8,0>
-                }
-        
-          translate <0,0.01,-0.42>
-        }        
-        
- 
-}
+       // Tubo do selim
+       merge{
+           cylinder {  <0,0,-0.12>, <0,0,0.12>, 0.1  }
+           cylinder { <0,0.05,0>, <0,0.9,0>, 0.07  rotate <0,0,-15>}  
+           translate <-tamBarraSuporteRoda-0.18,0,0>
+       }    
+         
+       merge{  
 
+           // Barra central superior
+           cylinder { <0,0,0>, <1.2,0,0>, grossuraTubosRodaTraseira rotate<0,0,165> translate <-tamBarraSuporteRoda,0.7,0>}   
+           
+           // Barra central inferior  
+           cylinder { <0,0,0>, <1.10,0,0>, grossuraTubosRodaTraseira rotate<0,0,-220> translate <-tamBarraSuporteRoda-0.18,0,0>}
+           cylinder { <0,0,0>, <0.2,0,0>, grossuraTubosRodaTraseira rotate<0,0,155> translate <-1.75,0.692,0>}
+               
+           // Conexao guidao-chassi-amortecedor   
+           cylinder { <0,0.5,0>, <0,0.9,0>, 0.07  rotate <0,0,-15> translate <-2.10,0.22,0>}                                                        
+        }
+          
+                           
+        texture {
+                pigment { cor_principal }
+                finish {finish_chassi}
+        }       
 
-chassi
-roda_traseira
-roda_dianteira
-amortecedor
+}   
+   
+object {roda_traseira }   
+object {chassi}
+
+        
+                
+         
+            

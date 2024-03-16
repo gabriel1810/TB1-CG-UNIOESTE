@@ -29,7 +29,7 @@ global_settings{ assumed_gamma 1.0 }
                             
                             //Visao traseira
 #declare Camera_1 = camera {angle 30     
-                            location  <20.0 , 2.0 , 0.0>
+                            location  <10.0 , 2.0 , 0.0>
                             right    -x*image_width/image_height
                             look_at   <-8.0 , 1.0 , 0.0>} 
                             
@@ -344,26 +344,24 @@ sky_sphere{ pigment{ gradient <0,1,0>
      
 
   #declare roda_toda = merge{
-            object {roda  scale <0.75,0.75,0.75>}
-            object {aros  scale <0.75,0.75,0.75>}
-            object{pneu translate<0,0,ini_lado_dirr+0.05>  scale <0.75,0.75,0.75>} 
-            object {disco_freio translate<0,0,ini_lado_esq+0.05>} 
+            object {roda scale<0.75,0.75,0.75>   translate<0,0,-(ini_lado_dirr+0.05)>}
+            object {aros scale<0.75,0.75,0.75>  translate<0,0,-(ini_lado_dirr+0.05)>}
+            object {pneu scale<0.75,0.75,0.75> } 
+            object {disco_freio translate<0,0,0.12>}
   }                        
      
 
 
 
 #declare roda_traseira = union { 
-         object{roda_toda translate<0.45,0.8,-0.1>}
+         object{roda_toda}
             
 } 
 
 #declare roda_dianteira = union {    
-       object{roda_toda translate<-2.65,0.8,-0.1> }      
+       object{roda_toda }      
 } 
   
-
-
 
 #declare chassi = merge{
      #declare grossuraTubosRodaTraseira = 0.04 ;
@@ -428,130 +426,68 @@ sky_sphere{ pigment{ gradient <0,1,0>
                 finish {finish_chassi}
         }       
 } 
+  
+  
+  
+#declare cor_amortecedor1 = pigment {color Gray}
+#declare cor_amortecedor2 = pigment {color Black}
 
-        
+#declare finish_amortecedor = finish { ambient 0.1 diffuse 0.9 reflection 0.05 specular 0.2  metallic }    
 
- 
 
-#declare amortecedor = union{
-
-    #declare cor_amortecedor1 = pigment {color Gray}
-    #declare cor_amortecedor2 = pigment {color Black}
-    
-    #declare finish_amortecedor = finish {
-                                ambient 0.1
-                                diffuse 0.9
-                                reflection 0.05
-                                specular 0.2 
-                                metallic
-                             }    
-                             
-                             
-           
-       union {
+#declare amortecedor =  merge{
+    #declare tamanhoInternoAmortecedor = 0.3;
+    #declare tamanhoExternoAmortecedor = 0.4;  
        
-           cylinder {
-                <-2.70,1.05,0>, <-2.718,1,0>, 0.05
-                texture {
-                    pigment { cor_amortecedor2 }
-                    finish {finish_amortecedor}
-                }
-                scale <1,1,1> translate <0.5,0.8,0>
-            }      
-    
-             cylinder {
-                <-2.729,0.98,-0.2>, <-2.729,0.98,0.2>, 0.048
-                texture {
-                    pigment { cor_amortecedor2 }
-                    finish {finish_amortecedor}
-                }
-                scale <1,1,1> translate <0.5,0.8,0>
+       merge{
+           sphere { <0,0,0>, 0.04 } 
+           cylinder { <0,0,0>, <0,-tamanhoInternoAmortecedor,0>, 0.042}
+                
+           texture {
+                pigment { cor_amortecedor2 }
+                finish {finish_amortecedor}
+            }  
+          }
+         
+    // Amortecedor
+    cylinder {
+            <0,0,0>, <0,tamanhoExternoAmortecedor,0>, 0.05
+            texture {
+                pigment { cor_amortecedor1 }
+                finish {finish_amortecedor}
+            }
+            translate <0,-tamanhoInternoAmortecedor*2,0>
+  }                           
+                    
+}
+  
+  
+  
+  
+#declare amortecedorCompleto = union{
+       merge {
+           cylinder { <0,0,0>, <0,0.1,0>, 0.047 translate <0,0.005,0>}      
+           cylinder { <0,0,-0.2>, <0,0,0.2>, 0.048 }
+            texture {
+                pigment { cor_amortecedor2 }
+                finish {finish_amortecedor}
             }
        
-       }
-        
-        
-        // Amortecedor direito
-        union{
-        
-        // Conexao guidao-amortecedor
-           sphere { <-2.7225,0.995,0.22>, 0.04 
-           texture { pigment{ cor_amortecedor2}
-                      finish { finish_amortecedor}
-                    } 
-    
-              scale<1,1,1>  rotate<0,0,0>  translate<0.5,0.8,0>  
-           } 
-                  
-                  
-        cylinder {
-                <-2.7225,1,0.22>, <-2.92,0.5,0.22>, 0.042
-                texture {
-                    pigment { cor_amortecedor2 }
-                    finish {finish_amortecedor}
-                }
-                scale <1,1,1> translate <0.5,0.8,0>
-            }
-            
-             
-            // Amortecedor
-            cylinder {
-                    <-2.82,0.75,0.22>, <-3.14,0,0.22>, 0.05
-                    texture {
-                        pigment { cor_amortecedor1 }
-                        finish {finish_amortecedor}
-                    }
-                    scale <1,1,1> translate <0.5,0.8,0>
-                }
-        
-          translate <0,0.01,-0.015>
-        }        
-        
-        
-        
-        // Amortecedor esquerdo 
-               union{
-        
-        // Conexao guidao-amortecedor
-           sphere { <-2.7225,0.995,0.22>, 0.04 
-           texture { pigment{ cor_amortecedor2}
-                      finish { finish_amortecedor}
-                    } 
-    
-              scale<1,1,1>  rotate<0,0,0>  translate<0.5,0.8,0>  
-           } 
-                  
-                  
-        cylinder {
-                <-2.7225,1,0.22>, <-2.92,0.5,0.22>, 0.042
-                texture {
-                    pigment { cor_amortecedor2 }
-                    finish {finish_amortecedor}
-                }
-                scale <1,1,1> translate <0.5,0.8,0>
-            }
-            
-             
-            // Amortecedor
-            cylinder {
-                    <-2.82,0.75,0.22>, <-3.14,0,0.22>, 0.05
-                    texture {
-                        pigment { cor_amortecedor1 }
-                        finish {finish_amortecedor}
-                    }
-                    scale <1,1,1> translate <0.5,0.8,0>
-                }
-        
-          translate <0,0.01,-0.42>
-        }        
-        
+       } 
+        object {amortecedor translate <0,0.008,0.19>}
+        object {amortecedor translate <0,0.008,-0.19>}
+        rotate <0,0,-15>      
  
 }
+        
+
+ 
 
 
-object {chassi translate<0.438,0.8,0>}
-object {roda_traseira }
-object {roda_dianteira translate<0.8,0,0> }
-object {amortecedor}
+object {chassi translate<0.438,0.8,0>} 
+object {roda_dianteira translate<-1.835,0.85,0> }
+object {roda_traseira translate<0.434,0.8,0> }
+object {amortecedorCompleto translate<-1.67,1.45,0>}
+
 
 

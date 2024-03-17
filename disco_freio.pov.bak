@@ -31,7 +31,7 @@ global_settings{ assumed_gamma 1.0 }
                             look_at   <-1.5 , 0.8 , 0.0>}
                             
 #declare camera_0_0_0 = camera {angle 30     
-                            location  <8, 0 , 2>
+                            location  <0, 0 , 8>
                             right    -x*image_width/image_height
                             look_at   <0 , 0 , 0.0>}                          
                                                         
@@ -51,107 +51,16 @@ sky_sphere{ pigment{ gradient <0,1,0>
            } // end of sky_sphere 
 //------------------------------------------------------------------------
 
-
-
-                 
 #declare cor_roda = pigment {color rgb<1.1,1.1,1.1>};
 #declare finish_roda = finish {
                             ambient 0.1
                             diffuse 1
                             reflection 0.002
-                            specular 0.2 
+                            specular 0.2
                             metallic
                          }    
-                         
-#declare cor_central_roda = pigment {color rgb<0.3,0.3,0.3>};
-
-#declare roda_dianteira = union { 
-         union{ 
-
-               
-               
-            // Roda       
-            difference{
-                 cylinder {<0, 0, -0.09>, <0, 0, 0.09>, 0.61 }
-                 cylinder {<0, 0, -0.095>,<0, 0, 0.095>, 0.58 }
-                 texture { pigment { cor_roda } finish { finish_roda} }
-            }     
-                                                                                              
-                     
-            //Aros roda dianteira
-            union { 
-                union{ 
-                // Central roda dianteira
-                   torus {
-                    0.035, 0.015
-                    texture {
-                            pigment { cor_central_roda }
-                            finish {
-                                ambient 0.1
-                                diffuse 0.2
-                                reflection 0.0009 
-                            }
-                        }
-                        scale <1,1,1> rotate<90,0,0>
-                    }
-                    
-                      scale<0,0,0.4>
-                      translate <0.398,0.798,0> 
-                
-                    }
-                     union{ 
-                // Central roda dianteira
-                   torus {
-                    0.035, 0.015
-                    texture {
-                            pigment { cor_central_roda }
-                            finish {
-                                ambient 0.1
-                                diffuse 0.2
-                                reflection 0.0009 
-                            }
-                        }
-                        scale <1,1,1> rotate<90,0,0>
-                    }
-                    
-                      scale<0,0,0.4>
-                      translate <0.398,0.798,-0.03> 
-                
-                    }
-            } 
-            
-                   
-                   
-         
-
-            
-            
-            
-            
-           }  
-            // Pneu dianteiro        
-        torus {
-            0.35, 0.05
-            texture {
-                pigment { color rgb<0.2,0.2,0.2> }
-                finish {
-                    ambient 0.1
-                    diffuse 0.2
-                    reflection 0.0009 
-                }
-                
-            }
-            scale <1.85,1.85,1.85> rotate <90,0,0>
-        } 
-        
-        
-        translate <-2.65,0.80,0>
-            
-}
-     
-   
-
-    union{                    
+          
+ #declare disco_freio = union{                    
         difference{
             difference{                
                 difference{  
@@ -194,175 +103,175 @@ sky_sphere{ pigment{ gradient <0,1,0>
                 
           }             
           
-                    difference{
-                         union{
-                            #local total = 6;
-                            #local i = 0; 
-                            #local angulo = 0 ;
+                difference{
+                     union{
+                        #local total = 6;
+                        #local i = 0; 
+                        #local angulo = 0 ;
+                        
+                        #while(i < total)
+                                 
+                           union{    
+                             isosurface { //-------------------------------------------------------------
+                              function{
+                                 f_spiral(
+                                    x,y,z,
+                                    1.5,  // distance between windings,
+                                    0.01, // thickness,
+                                    0.24,  // outer diameter of the spiral,
+                                    0,    // not used,
+                                    0,    // not used,
+                                    0.01   // cross section type
+                                 )
+                              }          
                             
-                            #while(i < total)
-                                     
-                               union{    
-                                 isosurface { //-------------------------------------------------------------
-                                  function{
-                                     f_spiral(
-                                        x,y,z,
-                                        1.5,  // distance between windings,
-                                        0.01, // thickness,
-                                        0.24,  // outer diameter of the spiral,
-                                        0,    // not used,
-                                        0,    // not used,
-                                        0.01   // cross section type
-                                     )
-                                  }          
-                                
-                                 threshold 0
-                                 max_gradient 5
-                                 rotate<90,0,0>
-                                 scale 0.5
-                                 translate< 0,0,0>
-                                } // end of isosurface -------------------------------------------------------
+                             threshold 0
+                             max_gradient 5
+                             rotate<90,0,0>
+                             scale 0.5
+                             translate< 0,0,0>
+                            } // end of isosurface -------------------------------------------------------
+                               
+                              rotate <0,0,angulo>  
+                           } 
                                    
-                                  rotate <0,0,angulo>  
-                               } 
-                                       
-                                #declare angulo = angulo + 60;
-                                #declare i = i + 1;
-                            #end   
-                            cylinder { <0,0,0.015>,<0,0,-0.015>,0.022} 
-                          } 
-                          
-                        cylinder { <0,0,0.02>,<0,0,-0.02>,0.02}    
-                                
-                    }  
+                            #declare angulo = angulo + 60;
+                            #declare i = i + 1;
+                        #end   
+                        cylinder { <0,0,0.015>,<0,0,-0.015>,0.05} 
+                      } 
+                      
+                    cylinder { <0,0,0.02>,<0,0,-0.02>,0.035}    
                             
-               texture {pigment {color rgb<0.05,0.05,0.05>} 
-               
-                          finish {
-                            ambient 0.1
-                            diffuse 1
-                            reflection 0.35
-                            specular 0.1 
-                            metallic
-                         }   
-                     }
-                     
-         translate <-2.65,0.80,0>
+                }  
+                        
+           texture {pigment {color rgb<0.05,0.05,0.05>}
+                      finish {
+                        ambient 0.1
+                        diffuse 1
+                        reflection 0.35
+                        specular 0.1 
+                        metallic
+                     }   
+                 }
       }
+        
+        
+ #declare pneu = merge{
+         torus {
+            0.356, 0.05
+            texture {
+                pigment { color rgb<0.2,0.2,0.2> }
+                finish {
+                    ambient 0.1
+                    diffuse 0.2
+                    reflection 0.0009 
+                }
+            }
+            scale <1.9,1.9,1.9> rotate <90,0,0>
+        } 
+ }
+
+
           
-          
- #declare ini_lado_esq = 0.09;
+ #declare ini_lado_esq = 0.135;
  #declare ini_lado_dirr = 0.045;         
 
-  #declare roda = union{
+ #declare roda = union{
   
         // Roda       
         difference{
              cylinder {<0, 0, 0>, <0, 0, 0.18>, 0.61 }
              cylinder {<0, 0, -0.1>,<0, 0, 0.19>, 0.58 }
-             texture { pigment { cor_roda } finish { finish_roda} }
-        }
-         
+        } 
          
         // Centro da roda    
         difference{
-             cylinder {<0, 0, ini_lado_esq>, <0, 0, ini_lado_dirr>, 0.048 }
+             merge{
+                cylinder {<0, 0, ini_lado_esq>, <0, 0, ini_lado_dirr>, 0.048 }
+                cylinder {<0, 0, ini_lado_esq-0.01>, <0, 0, ini_lado_esq>, 0.052 }
+                cylinder {<0, 0, ini_lado_dirr-0.01>, <0, 0, ini_lado_dirr>, 0.052 } 
+              }
              cylinder {<0, 0, -0.1>, <0, 0, 0.19>, 0.036 } 
-             texture { pigment { cor_roda } finish { finish_roda} }
         }
-        
-
-  }        
-      
-      
-  #declare nova_roda_dianteira = union{
-  
-            
-
-                                        
-      
-  
-         object{ roda }
-                           
-                           
-         #declare grossura_aros = 0.0055;
-
-                                    
-         #declare fim_lado_esq_1 = 0.05;
-         #declare fim_lado_esq_2 = -0.09;                        
-                                    
-                                    
-                                    
-         #declare fim_pares = 0.075;
-         #declare fim_impar = -0.165;   
-         
-
-        //Aros roda dianteira 
-        
-          // LADO ESQUERDO 
-          /*union{
-              #local i = 0;
-              #local numAros = 12;
-              #local angulo = 0;
-              
-              #while(i < numAros)
-                union{
-                    cylinder {<0, 0, ini_lado_esq>, <0, 0.58, fim_lado_esq_1>, grossura_aros texture {pigment { cor_roda } finish { finish_roda}}}
-                    //cylinder {<0, 0.54, fim_pares>, <0, 0.58, fim_pares>, grossura_aros+0.003 texture {pigment { cor_roda } finish { finish_roda}}}  
-                    rotate<0,0,angulo>
-                }
-                #declare angulo = angulo + 15;
-                #declare i = i + 1;
-              #end
-     
-          } 
-             
-             
-          
-          union{
-              #local i = 0;
-              #local numAros = 12;
-              #local angulo = 7.5;
-              
-              #while(i < numAros)
-                union{
-                    cylinder {<0, 0, ini_lado_esq>, <0, 0.58, fim_lado_esq_2>, grossura_aros texture {pigment { cor_roda } finish { finish_roda}}}
-                    //cylinder {<0, 0.54, fim_pares>, <0, 0.58, fim_pares>, grossura_aros+0.003 texture {pigment { cor_roda } finish { finish_roda}}}  
-                    rotate<0,0,angulo>
-                }
-                #declare angulo = angulo + 15;
-                #declare i = i + 1;
-              #end
-     
-          } 
-               */
-          
-          
-          
-          
-          
-                        
-      
-            
-                
-  
+        texture { pigment { cor_roda } finish { finish_roda} }
   }
-    
-     
-     
-     
-     
-   
-   
-   
-      
-      
+  
+  
+  #declare aros = merge{
+  #declare grossura_aros = 0.0055;
+     difference{
+               //Aros roda dianteira 
+              merge{
+                // LADO ESQUERDO
+                  #local i = 0;
+                  #local numAros = 9;
+                  #local angulo = 0;
+                  #while(i < numAros)
+                    union{
+                        cylinder {<0, 0, ini_lado_esq-0.0055>, <0, 0.58, ini_lado_dirr>, grossura_aros}
+                        cylinder {<0, 0.54, ini_lado_dirr+0.005>, <0, 0.58, ini_lado_dirr>, grossura_aros+0.003}
+                        rotate<0,0,angulo>
+                    }
+                    #declare angulo = angulo + 40;
+                    #declare i = i + 1;
+                  #end
 
+                  #local i = 0;
+                  #local numAros = 9;
+                  #local angulo = 20;
+                  
+                  #while(i < numAros)
+                    union{
+                        cylinder {<0, 0, ini_lado_esq-0.0055>, <0, 0.58, ini_lado_esq>, grossura_aros}
+                        cylinder {<0, 0.54, ini_lado_esq+0.005>, <0, 0.58, ini_lado_esq>, grossura_aros+0.003}
+                         rotate<0,0,angulo>
+                    }
+                    #declare angulo = angulo + 40;
+                    #declare i = i + 1;
+                  #end
+              
+                  //LADO DIREITO 
+                  #local i = 0;
+                  #local numAros = 9;
+                  #local angulo = 10;
+                  #while(i < numAros)
+                    union{
+                        cylinder {<0, 0, ini_lado_dirr+0.0055>, <0, 0.58, ini_lado_esq>, grossura_aros}
+                        cylinder {<0, 0.54, ini_lado_esq-0.005>, <0, 0.58, ini_lado_esq>, grossura_aros+0.003}
+                        rotate<0,0,angulo>
+                    }
+                    #declare angulo = angulo + 40;
+                    #declare i = i + 1;
+                  #end
          
-                  
-                  
-                      
-                      
-   nova_roda_dianteira                   
+                  #local i = 0;
+                  #local numAros = 9;
+                  #local angulo = 30;
+                  #while(i < numAros)
+                    union{
+                        cylinder {<0, 0, ini_lado_dirr+0.0055>, <0, 0.58, ini_lado_dirr>, grossura_aros}
+                        cylinder {<0, 0.54, ini_lado_dirr-0.005>, <0, 0.58, ini_lado_dirr>, grossura_aros+0.003}
+                        rotate<0,0,angulo>
+                    }
+                    #declare angulo = angulo + 40;
+                    #declare i = i + 1;
+                  #end
+              }
+                
+               cylinder {<0, 0, -0.1>, <0, 0, 0.19>, 0.036 } 
+              
+           }
+           texture {pigment { cor_roda } finish { finish_roda}}
+  }        
+     
 
-  // roda_dianteira
+  #declare roda_toda = merge{
+            object {roda}
+            object {aros}
+            object{pneu translate<0,0,ini_lado_dirr+0.05>} 
+            object {disco_freio translate<0,0,ini_lado_esq+0.05>} 
+  }                        
+                
+                      
+ roda_toda                   

@@ -275,3 +275,7 @@ sky_sphere{ pigment{ gradient <0,1,0>
                 
                       
  roda_toda                   
+               
+               
+               
+               

@@ -21,31 +21,43 @@ global_settings{ assumed_gamma 1.0 }
 //--------------------------------------------------------------------------  right handed, y up 
 
                             // Visao lado esquerdo
-#declare Camera_0 = camera {/*ultra_wide_angle*/ angle 15      
-                            location  <0.0 , 1.0 , 40.0>
+#declare Camera_visao_esquerda = camera {/*ultra_wide_angle*/ angle 15      
+                            location  <0.0 , 1.0 , 20.0>
                             right    -x*image_width/image_height
-                            look_at   <0.0 , 1.0 , 0.0>}        
+                            look_at   <0.0 , 1.0 , 0.0>}
+                            
+                            
+#declare Camera_visao_direita = camera {/*ultra_wide_angle*/ angle 15      
+                            location  <0.0 , 1.0 , -20.0>
+                            right    -x*image_width/image_height
+                            look_at   <0.0 , 1.0 , 0.0>}           
                             
                             
                             //Visao traseira
-#declare Camera_1 = camera {angle 30     
+#declare Camera_visao_traseira = camera {angle 30     
                             location  <10.0 , 2.0 , 0.0>
                             right    -x*image_width/image_height
                             look_at   <-8.0 , 1.0 , 0.0>} 
-                            
-                            
-                            
-#declare Camera_2 = camera {angle 15     
-                            location  <15.0 , 1.0 , -15>
+                              
+                              
+#declare cemera_visao_cima = camera {angle 15     
+                            location  <0 , 10 ,0>
                             right    -x*image_width/image_height
-                            look_at   <0 , 1.0 , 0.0>}
+                            look_at   <0 , 0 , 0.0>} 
                             
+                            
+                                                        
                             
 #declare Camera_diagonal_traseira_esquerda = camera {angle 15     
                             location  <15.0 , 1.0 , 15>
                             right    -x*image_width/image_height
                             look_at   <0 , 1.0 , 0.0>}
-                            
+
+#declare Camera_diagonal_traseira_direita = camera {angle 15     
+                            location  <15.0 , 1.0 , -15>
+                            right    -x*image_width/image_height
+                            look_at   <0 , 1.0 , 0.0>}
+                                                        
                             
 #declare Camera_pneu_traseiro = camera {angle 15     
                             location  <0.4 , 0.8 , 15>
@@ -60,16 +72,21 @@ global_settings{ assumed_gamma 1.0 }
                             
                             
 #declare Camera_amortecedor = camera {angle 35     
-                            location  <-2.4 , 1.35 , 10>
+                            location  <-1.8 , 0.8 , 5>
                             right    -x*image_width/image_height
-                            look_at   <-2.4 , 1.35 , 0.0>}
+                            look_at   <-1.8 , 0.8 , 0.0>}
                             
                             
 #declare Camera_frente_amortecedor = camera {angle 15     
-                            location  <-15 , 8 , 0>
+                            location  <-15 , 2 , 0>
                             right    -x*image_width/image_height
-                            look_at   <-2.4 , 1.3 , 0.0>} 
+                            look_at   <-2.4 , 1.3 , 0.0>}
                             
+                             
+#declare Camera_pinhao = camera {angle 15     
+                            location  <0.5 , 0.8 , -8>
+                            right    -x*image_width/image_height
+                            look_at   <0.5 , 0.8 , 0>}                             
                             
                             
 #declare Camera_centro_roda_dianteira = camera {angle 15     
@@ -78,16 +95,17 @@ global_settings{ assumed_gamma 1.0 }
                             look_at   <-1.5 , 0.8 , 0.0>}
                             
                             
+
                             
                                                          
                    
-camera{Camera_0}
+camera{Camera_visao_esquerda}
 //------------------------------------------------------------------------
 // sun -------------------------------------------------------------------
 light_source{<1500,2500, 2500> color White}
 // sky -------------------------------------------------------------------
 sky_sphere{ pigment{ gradient <0,1,0>
-                     color_map{ [0   color rgb<1,1,1>         ]//White
+                     color_map{ [0   color rgb<0,0.2,0.8>         ]//White
                                 [0.4 color rgb<0.14,0.14,0.56>]//~Navy
                                 [0.6 color rgb<0.14,0.14,0.56>]//~Navy
                                 [1.0 color rgb<1,1,1>         ]//White
@@ -97,42 +115,26 @@ sky_sphere{ pigment{ gradient <0,1,0>
 //------------------------------------------------------------------------
 
 
+// ground ------------------------------------------------------------
+plane { <0,1,0>, 0 
+        texture{ pigment{ color rgb<0.35,0.65,0.0>*0.72 }
+	         normal { bumps 0.75 scale 0.015 }
+                 finish { phong 0.1 }
+               } // end of texture
+      } // end of plan
+ 
+ 
 
-
-// ground -----------------------------------------------------------------
-//---------------------------------<<< settings of squared plane dimensions
-#declare RasterScale = 1.0;
-#declare RasterHalfLine  = 0.035;  
-#declare RasterHalfLineZ = 0.035; 
-//-------------------------------------------------------------------------
-#macro Raster(RScale, HLine) 
-       pigment{ gradient x scale RScale
-                color_map{[0.000   color rgbt<1,1,1,0>*0.6]
-                          [0+HLine color rgbt<1,1,1,0>*0.6]
-                          [0+HLine color rgbt<1,1,1,1>]
-                          [1-HLine color rgbt<1,1,1,1>]
-                          [1-HLine color rgbt<1,1,1,0>*0.6]
-                          [1.000   color rgbt<1,1,1,0>*0.6]} }
- #end// of Raster(RScale, HLine)-macro    
-//-------------------------------------------------------------------------
-    
-
-//plane { <0,1,0>, 0    // plane with layered textures
-//        texture { pigment{color White*1.1}
-//                  finish {ambient 0.45 diffuse 0.85}}
-//        texture { Raster(RasterScale,RasterHalfLine ) rotate<0,0,0> }
-//        texture { Raster(RasterScale,RasterHalfLineZ) rotate<0,90,0>}
-//        rotate<0,0,0>
-//      }       
+       
       
       
 // Rodas      
 
-#declare cor_roda = pigment {color rgb<1.1,1.1,1.1>};
+#declare cor_roda = pigment {color rgb<0.45,0.45,0.45>};
 #declare finish_roda = finish {
-                            ambient 0.1
-                            diffuse 1
-                            reflection 0.002
+                            ambient 0.2
+                            diffuse 0.6
+                            reflection 0.15
                             specular 0.2
                             metallic
                          }    
@@ -224,10 +226,10 @@ sky_sphere{ pigment{ gradient <0,1,0>
                         
            texture {pigment {color rgb<0.05,0.05,0.05>}
                       finish {
-                        ambient 0.1
-                        diffuse 1
-                        reflection 0.35
-                        specular 0.1 
+                        ambient 0.2
+                        diffuse 0.6
+                        reflection 0.15
+                        specular 0.2 
                         metallic
                      }   
                  }
@@ -237,14 +239,24 @@ sky_sphere{ pigment{ gradient <0,1,0>
  #declare pneu = merge{
          torus {
             0.356, 0.05
-            texture {
-                pigment { color rgb<0.2,0.2,0.2> }
-                finish {
+                 
+                texture { pigment{ color rgb<0.2,0.2,0.2>} 
+                   normal { ripples 5.5 sine_wave  frequency 30 scale 0.8
+                            translate<0,0.5,0> }
+                    finish {
                     ambient 0.1
                     diffuse 0.2
-                    reflection 0.0009 
+                    reflection 0 
+                    phong 0.01 phong_size 60
                 }
-            }
+                 } // end of texture 
+ 
+              
+                    
+                    
+
+   
+           
             scale <1.9,1.9,1.9> rotate <90,0,0>
         } 
  }
@@ -346,15 +358,56 @@ sky_sphere{ pigment{ gradient <0,1,0>
   #declare roda_toda = merge{
             object {roda scale<0.75,0.75,0.75>   translate<0,0,-(ini_lado_dirr+0.05)>}
             object {aros scale<0.75,0.75,0.75>  translate<0,0,-(ini_lado_dirr+0.05)>}
-            object {pneu scale<0.75,0.75,0.75> } 
-            object {disco_freio translate<0,0,0.12>}
+            object {pneu scale<0.75,0.75,0.75> translate<0,0,-0.022>} 
+            object {disco_freio translate<0,0,0.06>}
   }                        
      
 
-
+#declare pinhao =   merge{ 
+            // Pinhão com 7 velocidades, relacao 11/25
+           #local numPinhoes = 7;
+           #local escala = 1;
+           #local aux = 0;
+           #local numDentes = 11;
+           #local distEsfera = 0.27 ;
+           #local espacamentoPinhoes = 0;
+           #local rotacao = 0;  
+           #local escalaElipse = 5; 
+           
+           #while(aux < numPinhoes)
+                   difference{
+                        torus { 0.35,0.15 scale<1,0.2,1> rotate<90,0,0> } 
+                        #local i = 0;
+                        #local angulo = 0;
+                        #while(i < numDentes)
+                              sphere{ <0,distEsfera,0>, 0.2 scale<1,escalaElipse,1>  rotate<0,0,angulo> }
+                              #declare i = i + 1;
+                              #declare angulo = angulo + (360/numDentes);
+                        
+                        #end   
+                            
+                        texture { pigment{ color rgb<0.45,0.45,0.45>} 
+                                  finish{ ambient 0.2 diffuse 0.8 reflection 0.4 specular 0.2  metallic }
+                                } 
+                                
+                       scale <escala,escala,1> translate <0,0,espacamentoPinhoes> rotate<0,0,rotacao>
+                    
+                    }                 
+               #declare espacamentoPinhoes = espacamentoPinhoes - 0.065;
+               #declare distEsfera = distEsfera + (distEsfera*0.003); 
+               #declare numDentes = numDentes + 2;                              
+               #declare aux = aux+1;
+               #declare escala = escala + 0.5; 
+               #declare rotacao = rotacao + 5; 
+               #declare escalaElipse = escalaElipse + 0.15;
+           #end
+   
+        
+  }
 
 #declare roda_traseira = union { 
-         object{roda_toda}
+         object{roda_toda} 
+         object {pinhao rotate<180,0,0> scale <0.065,0.065,0.065> translate<0.002,0,-0.12>}
             
 } 
 
@@ -364,12 +417,12 @@ sky_sphere{ pigment{ gradient <0,1,0>
   
 
 #declare chassi = merge{
-     #declare grossuraTubosRodaTraseira = 0.04 ;
+     #declare grossuraTubosRodaTraseira = 0.035 ;
      #declare tamBarraSuporteRoda = 0.75; 
-     #declare espacamentoSuporteRoda = 0.19;
+     #declare espacamentoSuporteRoda = 0.15;
      
-     #declare cor_principal = pigment {color Green}
-     #declare finish_chassi = finish { ambient 0.1 diffuse 0.9 reflection 0.05 specular 0.2 metallic} 
+     #declare cor_principal = pigment {color Red}
+     #declare finish_chassi = finish { ambient 0.2 diffuse 0.6 reflection 0.1 specular 0.2 phong 0.5 phong_size 60 metallic} 
          
       // Suporte Esquerdo roda traseira     
       difference{    
@@ -378,7 +431,7 @@ sky_sphere{ pigment{ gradient <0,1,0>
               cylinder { <0,0,0>, <-tamBarraSuporteRoda,0,0>, grossuraTubosRodaTraseira }
               sphere { <0,0,0>, 0.0395}
               cylinder {<-tamBarraSuporteRoda+0.02,0,0.005>, <-tamBarraSuporteRoda-0.18,0,-0.105>, grossuraTubosRodaTraseira rotate<0,0,0> }
-              cylinder {<-tamBarraSuporteRoda-0.03,0,0.0045>, <-tamBarraSuporteRoda-0.36,0,-0.13>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+              cylinder {<-tamBarraSuporteRoda-0.03,0,0.002>, <-tamBarraSuporteRoda-0.36,0,-0.11>, grossuraTubosRodaTraseira rotate<0,0,-45> }
            }
            
            cylinder {<0, 0, -10>, <0, 0, 10>, 0.032 translate <-0.03,0.015,0> }
@@ -391,40 +444,42 @@ sky_sphere{ pigment{ gradient <0,1,0>
               cylinder { <0,0,0>, <-(tamBarraSuporteRoda+0.05),0,0>, grossuraTubosRodaTraseira rotate<0,0,-45> }
               cylinder { <0,0,0>, <-tamBarraSuporteRoda,0,0>, grossuraTubosRodaTraseira }
               sphere { <0,0,0>, 0.0395} 
-              cylinder {<-tamBarraSuporteRoda+0.02,0,0.005>, <-tamBarraSuporteRoda-0.18,0,0.105>, grossuraTubosRodaTraseira rotate<0,0,0> }
-              cylinder {<-tamBarraSuporteRoda-0.03,0,-0.003>, <-tamBarraSuporteRoda-0.36,0,0.13>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+              cylinder {<-tamBarraSuporteRoda+0.02,0,-0.005>, <-tamBarraSuporteRoda-0.18,0,0.105>, grossuraTubosRodaTraseira rotate<0,0,0> }
+              cylinder {<-tamBarraSuporteRoda-0.03,0,-0.0032>, <-tamBarraSuporteRoda-0.36,0,0.11>, grossuraTubosRodaTraseira rotate<0,0,-45> }
              }
            
            cylinder {<0, 0, -10>, <0, 0, 10>, 0.032 translate <-0.03,0.015,0> }
            rotate <0,3,0>  translate<0.03,-0.012,-espacamentoSuporteRoda>
-      }      
+      }
+            
       
     
        // Tubo do selim
        merge{
-           cylinder {  <0,0,-0.12>, <0,0,0.12>, 0.1  }
-           cylinder { <0,0.05,0>, <0,0.9,0>, 0.07  rotate <0,0,-15>}  
+           cylinder {  <0,0,-0.07>, <0,0,0.07>, 0.08  }
+           cylinder { <0,0.05,0>, <0,0.9,0>, 0.055  rotate <0,0,-15>}  
            translate <-tamBarraSuporteRoda-0.18,0,0>
-       }    
+       }  
          
        merge{  
 
            // Barra central superior
-           cylinder { <0,0,0>, <1.3,0,0>, grossuraTubosRodaTraseira rotate<0,0,165> translate <-tamBarraSuporteRoda,0.7,0>}   
+           cylinder { <0,0,0>, <1.3,0,0>, grossuraTubosRodaTraseira+0.005 rotate<0,0,165> translate <-tamBarraSuporteRoda,0.7,0>}   
            
            // Barra central inferior  
-           cylinder { <0,0,0>, <1.15,0,0>, grossuraTubosRodaTraseira rotate<0,0,-220> translate <-tamBarraSuporteRoda-0.18,0,0>}
-           cylinder { <0,0,0>, <0.25,0,0>, grossuraTubosRodaTraseira rotate<0,0,155> translate <-1.78,0.718,0>}
+           cylinder { <0,0,0>, <1.12,0,0>, grossuraTubosRodaTraseira+0.005 rotate<0,0,-219.5> translate <-tamBarraSuporteRoda-0.18,0,0>}
+           cylinder { <0,0,0>, <0.25,0,0>, grossuraTubosRodaTraseira+0.005 rotate<0,0,155> translate <-1.78,0.705,0>}
                
            // Conexao guidao-chassi-amortecedor   
-           cylinder { <0,0.5,0>, <0,0.9,0>, 0.07  rotate <0,0,-15> translate <-2.2,0.25,0>}                                                        
+           cylinder { <0,0.5,0>, <0,0.9,0>, 0.055  rotate <0,0,-15> translate <-2.2,0.25,0>}                                                        
         }
           
                            
         texture {
                 pigment { cor_principal }
                 finish {finish_chassi}
-        }       
+        }   
+                                           
 } 
   
   
@@ -432,12 +487,12 @@ sky_sphere{ pigment{ gradient <0,1,0>
 #declare cor_amortecedor1 = pigment {color Gray}
 #declare cor_amortecedor2 = pigment {color Black}
 
-#declare finish_amortecedor = finish { ambient 0.1 diffuse 0.9 reflection 0.05 specular 0.2  metallic }    
+#declare finish_amortecedor = finish { ambient 0.2 diffuse 0.6 reflection 0.1 specular 0.2  metallic }    
 
 
 #declare amortecedor =  merge{
     #declare tamanhoInternoAmortecedor = 0.3;
-    #declare tamanhoExternoAmortecedor = 0.4;  
+    #declare tamanhoExternoAmortecedor = 0.5;  
        
        merge{
            sphere { <0,0,0>, 0.04 } 
@@ -456,7 +511,7 @@ sky_sphere{ pigment{ gradient <0,1,0>
                 pigment { cor_amortecedor1 }
                 finish {finish_amortecedor}
             }
-            translate <0,-tamanhoInternoAmortecedor*2,0>
+            translate <0,-tamanhoInternoAmortecedor*2.15,0>
   }                           
                     
 }
@@ -479,15 +534,17 @@ sky_sphere{ pigment{ gradient <0,1,0>
         rotate <0,0,-15>      
  
 }
-        
+
 
  
 
+#declare bicicleta = merge{
 
-object {chassi translate<0.438,0.8,0>} 
+object {chassi rotate<0,0,-1> translate<0.438,0.8,-0.022>} 
 object {roda_dianteira translate<-1.835,0.85,0> }
 object {roda_traseira translate<0.434,0.8,0> }
-object {amortecedorCompleto translate<-1.67,1.45,0>}
+object {amortecedorCompleto rotate<0,0,-1> translate<-1.65,1.48,-0.022>}
 
-
-
+}
+   
+object {bicicleta translate<0,-0.22,0> rotate<0,0,1.5>}

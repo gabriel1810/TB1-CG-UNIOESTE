@@ -41,18 +41,18 @@ global_settings{ assumed_gamma 1.0 }
                             look_at   <0.0 , 1.0 , 0.0>}
                             
                             
-#declare camera_0_0_0_traseira = camera {/*ultra_wide_angle*/ angle 20      
-                            location  <10.0 , 3 , 0>
+#declare camera_0_0_0_traseira = camera {/*ultra_wide_angle*/ angle 30      
+                            location  <40.0 , 2 , 0>
                             right    -x*image_width/image_height
                             look_at   <0 , 0 , 0>}
                             
-#declare camera_0_0_0_esquerda = camera {/*ultra_wide_angle*/ angle 15      
-                            location  <0 , 0 , 15>
+#declare camera_0_0_0_esquerda = camera {/*ultra_wide_angle*/ angle 25      
+                            location  <0 , 0 , 25>
                             right    -x*image_width/image_height
                             look_at   <0 , 0 , 0>}            
                             
-#declare camera_0_0_0_direita = camera {/*ultra_wide_angle*/ angle 15      
-                            location  <0 , 0 , -15>
+#declare camera_0_0_0_direita = camera {/*ultra_wide_angle*/ angle 25      
+                            location  <0 , 0 , -25>
                             right    -x*image_width/image_height
                             look_at   <0 , 0 , 0>}                                                             
                                                                 
@@ -66,9 +66,13 @@ global_settings{ assumed_gamma 1.0 }
                             right    -x*image_width/image_height
                             look_at   <0 , 0 , 0>}                            
                                                                                                                 
+#declare camera_traseira_diagona_esquerda = camera {/*ultra_wide_angle*/ angle 30      
+                            location  <10 , 0 , 20>
+                            right    -x*image_width/image_height
+                            look_at   <0 , 0 , 0>} 
+                                                                   
                                        
-                                       
-camera{camera_0_0_0_cima }
+camera{camera_0_0_0_esquerda }
 //------------------------------------------------------------------------
 // sun -------------------------------------------------------------------
 light_source{<1500,2500, 2500> color White}
@@ -100,4 +104,45 @@ sky_sphere{ pigment{ gradient <0,1,0>
  #end// of Raster(RScale, HLine)-macro
  
  
- 
+#declare guidao = union{
+    #declare tamanhoGuidao = 4;
+    #declare grosGuidao = 0.2;
+ union{
+    cylinder{<0,0,-tamanhoGuidao>,<0,0,-tamanhoGuidao+(tamanhoGuidao/3)> grosGuidao+0.025}
+    cylinder{<0,0,tamanhoGuidao>,<0,0,tamanhoGuidao-(tamanhoGuidao/3)> grosGuidao+0.025}
+    texture { pigment { color rgb< 1, 1, 1>*0.05}
+    normal { pigment_pattern{
+                            average pigment_map{[1, gradient z sine_wave]
+                                                [1, gradient y scallop_wave]
+                                                [3, bumps  ]}
+                                         translate 0.02 scale 1}
+                                         5
+                         rotate< 0,0,0> scale 0.15 } 
+             finish {ambient 0.2 diffuse 0.1 reflection 0 specular 0.1 }   
+            }
+     }
+     
+    merge{
+        sphere{ <0,0,0>, grosGuidao + (grosGuidao*0.2)
+        scale<6,1,1> rotate <0,90,0>} 
+        cylinder{<0,0,-tamanhoGuidao>,<0,0,tamanhoGuidao> grosGuidao}
+        merge{
+          cylinder{<0,0,0>, <0.95,0,0> grosGuidao + (grosGuidao*0.1)
+          translate <0.01,0,0> }   
+          cylinder{<0,0,0>,<0,0.8,0> grosGuidao + (grosGuidao*0.2) translate<0.95,-0.7,0>}
+          sphere{ <0,0,0>, grosGuidao + (grosGuidao*0.2)translate<0.95,0.1,0>}                         
+        }
+        
+        
+        texture { pigment { color rgb< 0.25, 0.25, 0.25>}            
+             finish {ambient 0.2 diffuse 0.2 reflection 0.1 specular 0.2 metallic}   
+            }
+    }
+
+}  
+  
+  
+object{guidao}
+
+
+

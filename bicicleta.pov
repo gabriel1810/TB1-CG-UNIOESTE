@@ -22,7 +22,7 @@ global_settings{ assumed_gamma 1.0 }
 
                             // Visao lado esquerdo
 #declare Camera_visao_esquerda = camera {/*ultra_wide_angle*/ angle 15      
-                            location  <0.0 , 1.0 , 20.0>
+                            location  <0.0 , 1.0 , 15.0>
                             right    -x*image_width/image_height
                             look_at   <0.0 , 1.0 , 0.0>}
                             
@@ -48,12 +48,12 @@ global_settings{ assumed_gamma 1.0 }
                             
                                                         
                             
-#declare Camera_diagonal_traseira_esquerda = camera {angle 15     
+#declare Camera_diagonal_traseira_esquerda = camera {angle 10     
                             location  <15.0 , 1.0 , 15>
                             right    -x*image_width/image_height
                             look_at   <0 , 1.0 , 0.0>}
 
-#declare Camera_diagonal_traseira_direita = camera {angle 15     
+#declare Camera_diagonal_traseira_direita = camera {angle 10     
                             location  <15.0 , 1.0 , -15>
                             right    -x*image_width/image_height
                             look_at   <0 , 1.0 , 0.0>}
@@ -99,7 +99,9 @@ global_settings{ assumed_gamma 1.0 }
                             
                                                          
                    
-camera{Camera_visao_esquerda}
+camera{Camera_diagonal_traseira_esquerda}
+
+#declare usarReflexos=1;
 //------------------------------------------------------------------------
 // sun -------------------------------------------------------------------
 light_source{<1500,2500, 2500> color White}
@@ -134,7 +136,7 @@ plane { <0,1,0>, 0
 #declare finish_roda = finish {
                             ambient 0.2
                             diffuse 0.6
-                            reflection 0.15
+                            reflection 0.15*usarReflexos
                             specular 0.2
                             metallic
                          }    
@@ -228,7 +230,7 @@ plane { <0,1,0>, 0
                       finish {
                         ambient 0.2
                         diffuse 0.6
-                        reflection 0.15
+                        reflection 0.15*usarReflexos
                         specular 0.2 
                         metallic
                      }   
@@ -242,21 +244,15 @@ plane { <0,1,0>, 0
                  
                 texture { pigment{ color rgb<0.2,0.2,0.2>} 
                    normal { ripples 5.5 sine_wave  frequency 30 scale 0.8
-                            translate<0,0.5,0> }
+                            }
                     finish {
                     ambient 0.1
                     diffuse 0.2
                     reflection 0 
                     phong 0.01 phong_size 60
                 }
-                 } // end of texture 
+                 } 
  
-              
-                    
-                    
-
-   
-           
             scale <1.9,1.9,1.9> rotate <90,0,0>
         } 
  }
@@ -387,7 +383,7 @@ plane { <0,1,0>, 0
                         #end   
                             
                         texture { pigment{ color rgb<0.45,0.45,0.45>} 
-                                  finish{ ambient 0.2 diffuse 0.8 reflection 0.4 specular 0.2  metallic }
+                                  finish{ ambient 0.2 diffuse 0.8 reflection 0.4*usarReflexos specular 0.2  metallic }
                                 } 
                                 
                        scale <escala,escala,1> translate <0,0,espacamentoPinhoes> rotate<0,0,rotacao>
@@ -422,7 +418,7 @@ plane { <0,1,0>, 0
      #declare espacamentoSuporteRoda = 0.15;
      
      #declare cor_principal = pigment {color Red}
-     #declare finish_chassi = finish { ambient 0.2 diffuse 0.6 reflection 0.1 specular 0.2 phong 0.5 phong_size 60 metallic} 
+     #declare finish_chassi = finish { ambient 0.2 diffuse 0.6 reflection 0.1*usarReflexos specular 0.2 phong 0.5 phong_size 60 metallic} 
          
       // Suporte Esquerdo roda traseira     
       difference{    
@@ -487,7 +483,7 @@ plane { <0,1,0>, 0
 #declare cor_amortecedor1 = pigment {color Gray}
 #declare cor_amortecedor2 = pigment {color Black}
 
-#declare finish_amortecedor = finish { ambient 0.2 diffuse 0.6 reflection 0.1 specular 0.2  metallic }    
+#declare finish_amortecedor = finish { ambient 0.2 diffuse 0.6 reflection 0.1*usarReflexos specular 0.2  metallic }    
 
 
 #declare amortecedor =  merge{
@@ -536,6 +532,47 @@ plane { <0,1,0>, 0
 }
 
 
+#declare guidao = union{
+    #declare tamanhoGuidao = 4;
+    #declare grosGuidao = 0.2;
+ union{
+    cylinder{<0,0,-tamanhoGuidao>,<0,0,-tamanhoGuidao+(tamanhoGuidao/3)> grosGuidao+0.025}
+    cylinder{<0,0,tamanhoGuidao>,<0,0,tamanhoGuidao-(tamanhoGuidao/3)> grosGuidao+0.025}
+    texture { pigment { color rgb< 1, 1, 1>*0.05}
+    normal { pigment_pattern{
+                            average pigment_map{[1, gradient z sine_wave]
+                                                [1, gradient y scallop_wave]
+                                                [3, bumps  ]}
+                                         translate 0.02 scale 1}
+                                         5
+                         rotate< 0,0,0> scale 0.15 } 
+             finish {ambient 0.2 diffuse 0.1 reflection 0 specular 0.1 }   
+            }
+     }
+     
+    merge{
+        sphere{ <0,0,0>, grosGuidao + (grosGuidao*0.2)
+        scale<6,1,1> rotate <0,90,0>} 
+        cylinder{<0,0,-tamanhoGuidao>,<0,0,tamanhoGuidao> grosGuidao}
+        merge{
+          cylinder{<0,0,0>, <0.95,0,0> grosGuidao + (grosGuidao*0.1)
+          translate <0.01,0,0> }   
+          cylinder{<0,0,0>,<0,0.8,0> grosGuidao + (grosGuidao*0.2) translate<0.95,-0.7,0>}
+          sphere{ <0,0,0>, grosGuidao + (grosGuidao*0.2)translate<0.95,0.1,0>}                         
+        }
+        
+        
+        texture { pigment { color rgb< 0.25, 0.25, 0.25>}            
+             finish {ambient 0.2 diffuse 0.2 reflection 0.1 specular 0.2 metallic}   
+            }
+    }
+
+}   
+
+
+
+
+
  
 
 #declare bicicleta = merge{
@@ -544,6 +581,7 @@ object {chassi rotate<0,0,-1> translate<0.438,0.8,-0.022>}
 object {roda_dianteira translate<-1.835,0.85,0> }
 object {roda_traseira translate<0.434,0.8,0> }
 object {amortecedorCompleto rotate<0,0,-1> translate<-1.65,1.48,-0.022>}
+object {guidao rotate<0,0,-15> translate<-8.35,10.4,-0.105> scale <0.2,0.2,0.15>}
 
 }
    

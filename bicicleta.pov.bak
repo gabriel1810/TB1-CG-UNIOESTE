@@ -48,12 +48,12 @@ global_settings{ assumed_gamma 1.0 }
                             
                                                         
                             
-#declare Camera_diagonal_traseira_esquerda = camera {angle 15     
+#declare Camera_diagonal_traseira_esquerda = camera {angle 10     
                             location  <15.0 , 1.0 , 15>
                             right    -x*image_width/image_height
                             look_at   <0 , 1.0 , 0.0>}
 
-#declare Camera_diagonal_traseira_direita = camera {angle 15     
+#declare Camera_diagonal_traseira_direita = camera {angle 10     
                             location  <15.0 , 1.0 , -15>
                             right    -x*image_width/image_height
                             look_at   <0 , 1.0 , 0.0>}
@@ -99,7 +99,7 @@ global_settings{ assumed_gamma 1.0 }
                             
                                                          
                    
-camera{Camera_visao_esquerda}
+camera{Camera_diagonal_traseira_esquerda}
 
 #declare usarReflexos=1;
 //------------------------------------------------------------------------
@@ -555,10 +555,10 @@ plane { <0,1,0>, 0
         scale<6,1,1> rotate <0,90,0>} 
         cylinder{<0,0,-tamanhoGuidao>,<0,0,tamanhoGuidao> grosGuidao}
         merge{
-          cylinder{<0,0,0>, <1.5,0,0> grosGuidao + (grosGuidao*0.1)
-          translate <0.01,0,0> rotate<0,0,-20>}   
-          cylinder{<0,0,0>,<0,0.8,0> grosGuidao + (grosGuidao*0.3) translate<1.5,-1.15,0>}
-          sphere{ <0,0,0>, grosGuidao + (grosGuidao*0.3)translate<1.5,-0.35,0>}                         
+          cylinder{<0,0,0>, <0.95,0,0> grosGuidao + (grosGuidao*0.1)
+          translate <0.01,0,0> }   
+          cylinder{<0,0,0>,<0,0.8,0> grosGuidao + (grosGuidao*0.2) translate<0.95,-0.7,0>}
+          sphere{ <0,0,0>, grosGuidao + (grosGuidao*0.2)translate<0.95,0.1,0>}                         
         }
         
         
@@ -567,7 +567,7 @@ plane { <0,1,0>, 0
             }
     }
 
-}  
+}   
 
 
 
@@ -578,10 +578,10 @@ plane { <0,1,0>, 0
 #declare bicicleta = merge{
 
 object {chassi rotate<0,0,-1> translate<0.438,0.8,-0.022>} 
-//object {roda_dianteira translate<-1.835,0.85,0> }
-//object {roda_traseira translate<0.434,0.8,0> }
-//object {amortecedorCompleto rotate<0,0,-1> translate<-1.65,1.48,-0.022>}
-object {guidao translate<-9,10.5,0> scale <0.2,0.2,0.2>}
+object {roda_dianteira translate<-1.835,0.85,0> }
+object {roda_traseira translate<0.434,0.8,0> }
+object {amortecedorCompleto rotate<0,0,-1> translate<-1.65,1.48,-0.022>}
+object {guidao rotate<0,0,-15> translate<-8.35,10.4,-0.105> scale <0.2,0.2,0.15>}
 
 }
    

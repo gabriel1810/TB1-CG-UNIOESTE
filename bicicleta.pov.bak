@@ -17,7 +17,8 @@ global_settings{ assumed_gamma 1.0 }
 #include "shapes2.inc"
 #include "functions.inc"
 #include "math.inc"
-#include "transforms.inc"
+#include "transforms.inc" 
+#include "shapes3.inc"
 //--------------------------------------------------------------------------  right handed, y up 
 
                             // Visao lado esquerdo
@@ -27,7 +28,7 @@ global_settings{ assumed_gamma 1.0 }
                             look_at   <0.0 , 1.0 , 0.0>}
                             
                             
-#declare Camera_visao_direita = camera {/*ultra_wide_angle*/ angle 15      
+#declare Camera_visao_direita = camera {/*ultra_wide_angle*/ angle 20      
                             location  <0.0 , 1.0 , -10>
                             right    -x*image_width/image_height
                             look_at   <0.0 , 1.0 , 0.0>}           
@@ -40,8 +41,8 @@ global_settings{ assumed_gamma 1.0 }
                             look_at   <-8.0 , 0.0 , 0.0>} 
                               
                               
-#declare cemera_visao_cima = camera {angle 15     
-                            location  <0 , 10 ,0>
+#declare cemera_visao_cima = camera {angle 20     
+                            location  <3 , 10 ,0>
                             right    -x*image_width/image_height
                             look_at   <0 , 0 , 0.0>} 
                                                         
@@ -51,24 +52,38 @@ global_settings{ assumed_gamma 1.0 }
                             right    -x*image_width/image_height
                             look_at   <0 , 1.0 , 0.0>}
 
-#declare Camera_diagonal_traseira_direita = camera {angle 20     
+#declare Camera_diagonal_traseira_direita = camera {angle 10     
                             location  <10.0 , 1.0 , -8>
                             right    -x*image_width/image_height
                             look_at   <0 , 1.0 , 0.0>}
                                                         
                             
 #declare Camera_pneu_traseiro = camera {angle 15     
-                            location  <0.4 , 0.8 , 15>
+                            location  <0.35 , 0.55 , -4>
                             right    -x*image_width/image_height
-                            look_at   <0.4 , 0.8 , 0.0>}
+                            look_at   <0.35 , 0.55 , 0.0>}
                             
                             
 #declare Camera_pneu_dianteiro = camera {angle 15     
-                            location  <-1.5 , 0.8 , 15>
+                            location  <-1.92, 0.6 , -4>
                             right    -x*image_width/image_height
-                            look_at   <-1.5 , 0.8 , 0.0>}
+                            look_at   <-1.92 , 0.6 , 0.0>}
+                                                    
+                                                  
+                                                  
+                                                  
+                                                    
+#declare Camera_pneu_dianteiro_frente = camera {angle 15     
+                            location  <-5, 0.6 , 0>
+                            right    -x*image_width/image_height
+                            look_at   <-1.92 , 0.6 , 0.0>}                            
                             
                             
+                             
+                             
+                             
+                             
+                             
 #declare Camera_amortecedor = camera {angle 35     
                             location  <-1.8 , 0.8 , 5>
                             right    -x*image_width/image_height
@@ -358,7 +373,7 @@ plane { <0,1,0>, 0
             object {roda scale<0.75,0.75,0.75>   translate<0,0,-(ini_lado_dirr+0.05)>}
             object {aros scale<0.75,0.75,0.75>  translate<0,0,-(ini_lado_dirr+0.05)>}
             object {pneu scale<0.75,0.75,0.75> translate<0,0,-0.022>} 
-            object {disco_freio translate<0,0,0.06>}
+            object {disco_freio translate<0,0,0.06> scale<1,1,0.85>}
   }                        
      
 
@@ -406,49 +421,70 @@ plane { <0,1,0>, 0
 
 #declare roda_traseira = union { 
          object{roda_toda} 
-         object {pinhao rotate<180,0,0> scale <0.065,0.065,0.065> translate<0.002,0,-0.12>}
+         object {pinhao rotate<180,0,0> scale <0.065,0.065,0.065> translate<0.002,0,-0.11>}
             
 } 
 
 #declare roda_dianteira = union {    
        object{roda_toda }      
 } 
-  
+
+
 
 #declare chassi = merge{
-     #declare grossuraTubosRodaTraseira = 0.035 ;
+     #declare grossuraTubosRodaTraseira = 0.0285 ;
      #declare tamBarraSuporteRoda = 0.75; 
-     #declare espacamentoSuporteRoda = 0.15;
+     #declare espacamentoSuporteRoda = 0.12;
      
      #declare cor_principal = pigment {color Red}
      #declare finish_chassi = finish { ambient 0.2 diffuse 0.6 reflection 0.1*usarReflexos specular 0.2 phong 0.5 phong_size 60 metallic} 
          
       // Suporte Esquerdo roda traseira     
       difference{    
-           merge{
-              cylinder { <0,0,0>, <-(tamBarraSuporteRoda+0.05),0,0>, grossuraTubosRodaTraseira rotate<0,0,-45> }
-              cylinder { <0,0,0>, <-tamBarraSuporteRoda+0.06,0,0>, grossuraTubosRodaTraseira }
-              sphere { <0,0,0>, grossuraTubosRodaTraseira}
-              cylinder {<-tamBarraSuporteRoda+0.08,0,0.005>, <-tamBarraSuporteRoda-0.18,0,-0.085>, grossuraTubosRodaTraseira*0.95 rotate<0,0,0> }
-              cylinder {<-tamBarraSuporteRoda-0.03,0,0.002>, <-tamBarraSuporteRoda-0.36,0,-0.11>, grossuraTubosRodaTraseira rotate<0,0,-45> }
-           }
+           merge{ 
+              // Tubo cima
+              cylinder { <0,0,0>, <-(tamBarraSuporteRoda)*0.9,0,0>, grossuraTubosRodaTraseira*0.9 rotate<0,0,-45> }
+              
+              ////Ligacao tubo cima-tuboselim
+              cylinder {<0,0,0>, <-0.28,0,0>, grossuraTubosRodaTraseira*0.9 rotate<0,-18,-45> translate<-0.47,0.468,0>}
+             
+                 
+                 
+               //Tubo baixo
+              cylinder { <0,0,0>, <-tamBarraSuporteRoda*0.75,0,0>, grossuraTubosRodaTraseira*0.9 }
+              sphere { <0,0,0>, grossuraTubosRodaTraseira*0.9 translate<-0.001,0,0>} 
+              
+              //Ligacao tubo baixo-tuboselim
+              cylinder {<0,0,0>, <-0.22,0,0>, grossuraTubosRodaTraseira*0.88 rotate<0,-20,0> translate<-0.56,0,0>}
+                                           
+              }
            
-           cylinder {<0, 0, -10>, <0, 0, 10>, 0.032 translate <-0.03,0.015,0> }
-           rotate <0,-3,0> translate<0.03,-0.012,espacamentoSuporteRoda>
-      } 
-        
+           cylinder {<0, 0, -10>, <0, 0, 10>, 0.02 translate <-0.015,0.005,0> }
+           rotate <0,-1,0> translate<-0.1,-0.012,espacamentoSuporteRoda>
+      }  
+                       
+                       
       // Suporte lado Direito
       difference{    
            merge{
-              cylinder { <0,0,0>, <-(tamBarraSuporteRoda+0.05),0,0>, grossuraTubosRodaTraseira rotate<0,0,-45> }
-              cylinder { <0,0,0>, <-tamBarraSuporteRoda+0.06,0,0>, grossuraTubosRodaTraseira }
-              sphere { <0,0,0>, grossuraTubosRodaTraseira} 
-              cylinder {<-tamBarraSuporteRoda+0.08,0,-0.005>, <-tamBarraSuporteRoda-0.18,0,0.085>, grossuraTubosRodaTraseira*0.95 rotate<0,0,0> }
-              cylinder {<-tamBarraSuporteRoda-0.03,0,-0.002>, <-tamBarraSuporteRoda-0.36,0,0.11>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+              // Tubo cima
+              cylinder { <0,0,0>, <-(tamBarraSuporteRoda)*0.9,0,0>, grossuraTubosRodaTraseira*0.9 rotate<0,0,-45> }
+              
+              ////Ligacao tubo cima-tuboselim
+              cylinder {<0,0,0>, <-0.28,0,0>, grossuraTubosRodaTraseira*0.9 rotate<0,18,-45> translate<-0.47,0.468,0>}
+             
+              
+              //Tubo baixo
+              cylinder { <0,0,0>, <-tamBarraSuporteRoda*0.75,0,0>, grossuraTubosRodaTraseira*0.9 }
+              sphere { <0,0,0>, grossuraTubosRodaTraseira*0.9 translate<-0.001,0,0>} 
+              
+              //Ligacao tubo baixo-tuboselim
+              cylinder {<0,0,0>, <-0.22,0,0>, grossuraTubosRodaTraseira*0.88 rotate<0,20,0> translate<-0.56,0,0>}
+                          
              }
            
-           cylinder {<0, 0, -10>, <0, 0, 10>, 0.032 translate <-0.03,0.015,0> }
-           rotate <0,4,0>  translate<0.03,-0.012,-espacamentoSuporteRoda>
+           cylinder {<0, 0, -10>, <0, 0, 10>, 0.02 translate <-0.015,0.005,0> }
+           rotate <0,1,0>  translate<-0.1,-0.012,-espacamentoSuporteRoda>
       }
             
       
@@ -473,11 +509,28 @@ plane { <0,1,0>, 0
            cylinder { <0,0.5,0>, <0,0.9,0>, 0.055  rotate <0,0,-15> translate <-2.2,0.25,0>}                                                        
         }
           
+            
+            
+
+        
+
+        object{ Pyramid_N_AB( 8, <0,0,0>,      0.011, <0,0.035,0>, 0.05 ) 
+
+                 rotate< 90,0, 0>  translate< -0.1125, -0.01, -0.16>
+              } 
+
+        object{ Pyramid_N_AB( 8, <0,0,0>,      0.011, <0,0.035,0>, 0.05 ) 
+
+                rotate< -90,0, 0>  translate< -0.1125, -0.01, 0.16>
+              } 
+    
+        cylinder{<0,0,0>,<0,0,0.295> 0.022 translate<-0.1125,-0.01,-0.148>}
                            
         texture {
                 pigment { cor_principal }
                 finish {finish_chassi}
-        }   
+        }
+        
                                            
 } 
   
@@ -509,9 +562,13 @@ plane { <0,1,0>, 0
             texture {
                 pigment { cor_amortecedor1 }
                 finish {finish_amortecedor}
-            }
+            }  
+            
             translate <0,-tamanhoInternoAmortecedor*2.15,0>
   }                           
+    
+    
+    
                     
 }
   
@@ -522,14 +579,53 @@ plane { <0,1,0>, 0
        merge {
            cylinder { <0,0,0>, <0,0.1,0>, 0.047 translate <0,0.005,0>}      
            cylinder { <0,0,-0.2>, <0,0,0.2>, 0.048 }
+           
             texture {
                 pigment { cor_amortecedor2 }
                 finish {finish_amortecedor}
-            }
-       
+            }  
+            
+
        } 
         object {amortecedor translate <0,0.008,0.19>}
-        object {amortecedor translate <0,0.008,-0.19>}
+        object {amortecedor translate <0,0.008,-0.19>} 
+        
+            cylinder{<0,0,0>,<0,0,0.4> 0.02
+             texture {
+                pigment { cor_amortecedor1 }
+                finish {finish_amortecedor}
+             } 
+                 translate<-0.0045,-0.66,-0.2>
+            }
+                
+                
+            
+          sphere { <0,0,0>, 0.0525 
+
+        texture {
+                pigment { cor_amortecedor1 }
+                finish {finish_amortecedor}
+             }  // end of texture                                     
+
+          scale<1,1,1>  rotate<0,0,0>  translate<0,-0.63,-0.188>  
+       }  
+         
+         
+          sphere { <0,0,0>, 0.0525 
+
+        texture {
+                pigment { cor_amortecedor1 }
+                finish {finish_amortecedor}
+             }  // end of texture                                     
+
+          scale<1,1,1>  rotate<0,0,0>  translate<0,-0.63,0.188>  
+       }  
+
+  
+            
+            
+            
+        
         rotate <0,0,-15>      
  
 }
@@ -630,7 +726,64 @@ plane { <0,1,0>, 0
         finish{ ambient 0.2 diffuse 0.6 reflection 0.05 specular 0.2 phong 0.5 phong_size 60 metallic }
         pigment {color rgb<0.05,0.05,0.05>} 
     } 
-} 
+}  
+  
+#declare pedal = merge{
+    sphere { <0,0,0>, 0.10 scale<2,2,1> translate<0,0,-0.28>}
+    cylinder{ <0,0,0>,<-1.6,0,0> 0.08 rotate<0,-3,0> scale<1,1.5,1> translate<0,0,-0.29> }
+              
+         
+    
+    union{ 
+        merge{
+            cylinder{ <-1.75,0,0>,<-1.75,0,-0.75> 0.065 rotate<0,-3,0>  translate<0,0,-0.29> }
+             object{ Supertorus( 1.00, 0.25,0.25, 0.45,0.001, 1.50) 
+                scale <0.28,0.25,0.25> 
+                rotate<0,-3,0> 
+                translate<-1.72,0,-0.82>
+              }  
+          texture { 
+            pigment {color rgb<0.05,0.05,0.05>}
+            finish{ ambient 0.2 diffuse 0.6 reflection 0 specular 0.2  }
+            }   
+         }
+          
+        box { <0, 0,0>,< 0.005, 0.10, 0.4>   
+            texture { pigment{ color rgb< 1.0, 0.65, 0.0>}  finish { phong 1 reflection{ 0.8 metallic 0} } } 
+            rotate<0,-3,0> translate<-1.365,-0.05,-1> 
+        }
+        
+        
+        box { <0, 0,0>,< 0.005, 0.10, 0.4>   
+            texture { pigment{ color rgb< 1.0, 0.65, 0.0>}  finish { phong 1 reflection{ 0.8 metallic 0} } } 
+            rotate<0,-3,0> translate<-2.058,-0.05,-1.05> 
+        }  
+    
+         rotate <0,0,-15> translate <0.2,-0.42,0>
+    
+    }   
+       rotate<0,-1,0>
+                  
+
+     texture { 
+        finish{ ambient 0.2 diffuse 0.6 reflection 0.05 specular 0.2 phong 0.5 phong_size 60 metallic }
+        pigment {color rgb<0.05,0.05,0.05>} 
+    }  
+ 
+}       
+
+
+#declare pedalTodo = merge {
+ object {pedivela} 
+ object {pedal}
+ cylinder{<0,0,0>,<0,0,1.10> 0.2 translate <0,0,-0.1> texture { 
+        finish{ ambient 0.2 diffuse 0.6 reflection 0.05 specular 0.2 phong 0.5 phong_size 60 metallic }
+        pigment {color rgb<0.05,0.05,0.05>} 
+    }  } 
+ object {pedal  rotate<-180,0,-180> translate <0,0,0.75>}
+ 
+
+}
 
 
 
@@ -641,10 +794,10 @@ plane { <0,1,0>, 0
 
 object {chassi rotate<0,0,-1> translate<0.438,0.8,-0.022>} 
 object {roda_dianteira translate<-1.835,0.85,0> }
-object {roda_traseira translate<0.434,0.8,0> }
+object {roda_traseira translate<0.323,0.8,0> }
 object {amortecedorCompleto rotate<0,0,-1> translate<-1.65,1.48,-0.022>}
 object {guidao rotate<0,0,-15> translate<-8.35,10.4,-0.105> scale <0.2,0.2,0.15>}
-object {pedivela scale <0.2,0.2,0.2> translate<-0.5,0.82,-0.105>}
+object {pedalTodo scale <0.2,0.2,0.2> translate<-0.5,0.82,-0.105>}
 
 }
    

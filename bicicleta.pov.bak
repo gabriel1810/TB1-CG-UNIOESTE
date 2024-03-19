@@ -28,24 +28,22 @@ global_settings{ assumed_gamma 1.0 }
                             
                             
 #declare Camera_visao_direita = camera {/*ultra_wide_angle*/ angle 15      
-                            location  <0.0 , 1.0 , -20.0>
+                            location  <0.0 , 1.0 , -10>
                             right    -x*image_width/image_height
                             look_at   <0.0 , 1.0 , 0.0>}           
                             
                             
                             //Visao traseira
-#declare Camera_visao_traseira = camera {angle 30     
-                            location  <10.0 , 2.0 , 0.0>
+#declare Camera_visao_traseira = camera {angle 15     
+                            location  <10.0 ,1.0 , 0.0>
                             right    -x*image_width/image_height
-                            look_at   <-8.0 , 1.0 , 0.0>} 
+                            look_at   <-8.0 , 0.0 , 0.0>} 
                               
                               
 #declare cemera_visao_cima = camera {angle 15     
                             location  <0 , 10 ,0>
                             right    -x*image_width/image_height
                             look_at   <0 , 0 , 0.0>} 
-                            
-                            
                                                         
                             
 #declare Camera_diagonal_traseira_esquerda = camera {angle 10     
@@ -53,8 +51,8 @@ global_settings{ assumed_gamma 1.0 }
                             right    -x*image_width/image_height
                             look_at   <0 , 1.0 , 0.0>}
 
-#declare Camera_diagonal_traseira_direita = camera {angle 10     
-                            location  <15.0 , 1.0 , -15>
+#declare Camera_diagonal_traseira_direita = camera {angle 20     
+                            location  <10.0 , 1.0 , -8>
                             right    -x*image_width/image_height
                             look_at   <0 , 1.0 , 0.0>}
                                                         
@@ -92,19 +90,24 @@ global_settings{ assumed_gamma 1.0 }
 #declare Camera_centro_roda_dianteira = camera {angle 15     
                             location  <5 , 0.8 , 3>
                             right    -x*image_width/image_height
-                            look_at   <-1.5 , 0.8 , 0.0>}
+                            look_at   <-1.5 , 0.8 , 0.0>}    
                             
+                            
+#declare camera_0_0_0_cima = camera {/*ultra_wide_angle*/ angle 20      
+                            location  <-0 , 5 , 0>
+                            right    -x*image_width/image_height
+                            look_at   <0 , 0 , 0>}                                  
                             
 
                             
                                                          
                    
-camera{Camera_diagonal_traseira_esquerda}
+camera{Camera_diagonal_traseira_direita}
 
 #declare usarReflexos=1;
 //------------------------------------------------------------------------
 // sun -------------------------------------------------------------------
-light_source{<1500,2500, 2500> color White}
+light_source{<1500,2500, -2500> color White}
 // sky -------------------------------------------------------------------
 sky_sphere{ pigment{ gradient <0,1,0>
                      color_map{ [0   color rgb<0,0.2,0.8>         ]//White
@@ -424,28 +427,28 @@ plane { <0,1,0>, 0
       difference{    
            merge{
               cylinder { <0,0,0>, <-(tamBarraSuporteRoda+0.05),0,0>, grossuraTubosRodaTraseira rotate<0,0,-45> }
-              cylinder { <0,0,0>, <-tamBarraSuporteRoda,0,0>, grossuraTubosRodaTraseira }
-              sphere { <0,0,0>, 0.0395}
-              cylinder {<-tamBarraSuporteRoda+0.02,0,0.005>, <-tamBarraSuporteRoda-0.18,0,-0.105>, grossuraTubosRodaTraseira rotate<0,0,0> }
+              cylinder { <0,0,0>, <-tamBarraSuporteRoda+0.06,0,0>, grossuraTubosRodaTraseira }
+              sphere { <0,0,0>, grossuraTubosRodaTraseira}
+              cylinder {<-tamBarraSuporteRoda+0.08,0,0.005>, <-tamBarraSuporteRoda-0.18,0,-0.085>, grossuraTubosRodaTraseira*0.95 rotate<0,0,0> }
               cylinder {<-tamBarraSuporteRoda-0.03,0,0.002>, <-tamBarraSuporteRoda-0.36,0,-0.11>, grossuraTubosRodaTraseira rotate<0,0,-45> }
            }
            
            cylinder {<0, 0, -10>, <0, 0, 10>, 0.032 translate <-0.03,0.015,0> }
            rotate <0,-3,0> translate<0.03,-0.012,espacamentoSuporteRoda>
-      }
+      } 
         
       // Suporte lado Direito
       difference{    
            merge{
               cylinder { <0,0,0>, <-(tamBarraSuporteRoda+0.05),0,0>, grossuraTubosRodaTraseira rotate<0,0,-45> }
-              cylinder { <0,0,0>, <-tamBarraSuporteRoda,0,0>, grossuraTubosRodaTraseira }
-              sphere { <0,0,0>, 0.0395} 
-              cylinder {<-tamBarraSuporteRoda+0.02,0,-0.005>, <-tamBarraSuporteRoda-0.18,0,0.105>, grossuraTubosRodaTraseira rotate<0,0,0> }
-              cylinder {<-tamBarraSuporteRoda-0.03,0,-0.0032>, <-tamBarraSuporteRoda-0.36,0,0.11>, grossuraTubosRodaTraseira rotate<0,0,-45> }
+              cylinder { <0,0,0>, <-tamBarraSuporteRoda+0.06,0,0>, grossuraTubosRodaTraseira }
+              sphere { <0,0,0>, grossuraTubosRodaTraseira} 
+              cylinder {<-tamBarraSuporteRoda+0.08,0,-0.005>, <-tamBarraSuporteRoda-0.18,0,0.085>, grossuraTubosRodaTraseira*0.95 rotate<0,0,0> }
+              cylinder {<-tamBarraSuporteRoda-0.03,0,-0.002>, <-tamBarraSuporteRoda-0.36,0,0.11>, grossuraTubosRodaTraseira rotate<0,0,-45> }
              }
            
            cylinder {<0, 0, -10>, <0, 0, 10>, 0.032 translate <-0.03,0.015,0> }
-           rotate <0,3,0>  translate<0.03,-0.012,-espacamentoSuporteRoda>
+           rotate <0,4,0>  translate<0.03,-0.012,-espacamentoSuporteRoda>
       }
             
       
@@ -568,7 +571,66 @@ plane { <0,1,0>, 0
     }
 
 }   
+   
+   
+   
+ #declare coroa = union{  
+   // coroa com 3 velocidades, relacao 44/34/24
+   #local numPinhoes = 3;
+   #local escala = 1;
+   #local aux = 0;
+   #local numDentes = 24;
+   #local distEsfera = 0.226 ;
+   #local espacamentoPinhoes = 0;
+   #local rotacao = 0;  
+   #local escalaElipse = 15; 
+   
+   #while(aux < numPinhoes)
+           difference{
+                torus { 0.38,0.1 scale<1,0.2,1> rotate<90,0,0> } 
+                #local i = 0;
+                #local angulo = 0;
+                #while(i < numDentes)
+                      sphere{ <0,distEsfera,0>, 0.2 scale<1,escalaElipse,1>  rotate<0,0,angulo> }
+                      #declare i = i + 1;
+                      #declare angulo = angulo + (360/numDentes);
+                #end      
+                texture { pigment{ color rgb<0.25,0.25,0.25>} 
+                          finish{ ambient 0.1 diffuse 0.9 reflection 0.2 specular 0.2  metallic }
+                        } 
+                        
+               scale <escala,escala,1> translate <0,0,espacamentoPinhoes> rotate<0,0,rotacao>
+            
+            }                 
+       #declare espacamentoPinhoes = espacamentoPinhoes - 0.065;
+       #declare distEsfera = distEsfera + (distEsfera*0.003); 
+       #declare numDentes = numDentes + 10;                              
+       #declare aux = aux+1;
+       #declare escala = escala + 0.5; 
+       #declare rotacao = rotacao + 5; 
+       #declare escalaElipse = escalaElipse + 0.55;
+   #end
+}  
 
+
+#declare pedivela = union{
+    object {coroa}
+    torus { 0.415,0.08 scale<2.1,0.2,2.1> rotate<90,0,0> translate<0,0,-0.2> } 
+    
+    cylinder{ <0,0,0>,<0,0,-0.085> 0.25  translate<0,0,-0.18> }
+    
+    #local i = 0;
+    #local angulo = 0;
+    #while(i < 5) 
+         box { <0.00, 0.00, 0.00>,< 0.15, 0.8, 0.045> scale <1,1,1>  translate<-0.055,0,-0.25>  rotate<5,0,angulo> } 
+       #declare angulo = angulo + 72;
+       #declare i = i+1;
+    #end 
+    texture { 
+        finish{ ambient 0.2 diffuse 0.6 reflection 0.05 specular 0.2 phong 0.5 phong_size 60 metallic }
+        pigment {color rgb<0.05,0.05,0.05>} 
+    } 
+} 
 
 
 
@@ -582,6 +644,7 @@ object {roda_dianteira translate<-1.835,0.85,0> }
 object {roda_traseira translate<0.434,0.8,0> }
 object {amortecedorCompleto rotate<0,0,-1> translate<-1.65,1.48,-0.022>}
 object {guidao rotate<0,0,-15> translate<-8.35,10.4,-0.105> scale <0.2,0.2,0.15>}
+object {pedivela scale <0.2,0.2,0.2> translate<-0.5,0.82,-0.105>}
 
 }
    

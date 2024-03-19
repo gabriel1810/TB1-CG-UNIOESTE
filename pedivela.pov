@@ -46,7 +46,7 @@ global_settings{ assumed_gamma 1.0 }
                             right    -x*image_width/image_height
                             look_at   <0 , 0 , 0>}
                             
-#declare camera_0_0_0_diagonal = camera {/*ultra_wide_angle*/ angle 20      
+#declare camera_0_0_0_diagonal = camera {/*ultra_wide_angle*/ angle 30      
                             location  <10.0 , 1 , -5>
                             right    -x*image_width/image_height
                             look_at   <0 , 0 , 0>}                            
@@ -57,7 +57,7 @@ global_settings{ assumed_gamma 1.0 }
                             right    -x*image_width/image_height
                             look_at   <0 , 0 , 0>}            
                             
-#declare camera_0_0_0_direita = camera {/*ultra_wide_angle*/ angle 15      
+#declare camera_0_0_0_direita = camera {/*ultra_wide_angle*/ angle 20      
                             location  <0 , 0 , -15>
                             right    -x*image_width/image_height
                             look_at   <0 , 0 , 0>}                                                             
@@ -165,7 +165,40 @@ sky_sphere{ pigment{ gradient <0,1,0>
         pigment {color rgb<0.05,0.05,0.05>} 
     } 
 }  
-
-     
+  
+#declare pedal = merge{
+    sphere { <0,0,0>, 0.10 scale<2,2,1> translate<0,0,-0.28>}
+    cylinder{ <0,0,0>,<-1.8,0,0> 0.08 rotate<0,-3,0> scale<1,1.5,1> translate<0,0,-0.29> }
+    cylinder{ <-1.75,0,0>,<-1.75,0,-0.75> 0.065 rotate<0,-3,0>  translate<0,0,-0.29> }          
+            
+    object{ Supertorus( 1.00, 0.25,0.25, 0.45,0.001, 1.50) 
+        scale <0.28,0.25,0.25> 
+        rotate<0,-3,0> 
+        translate<-1.72,0,-0.82>
+      }
+      
+    box { <0, 0,0>,< 0.005, 0.10, 0.4>   
+        texture { pigment{ color rgb< 1.0, 0.65, 0.0>}  finish { phong 1 reflection{ 0.00 metallic 0.00} } } 
+        rotate<0,-3,0> translate<-1.365,-0.05,-1> 
+    }
     
-pedivela
+    
+    box { <0, 0,0>,< 0.005, 0.10, 0.4>   
+        texture { pigment{ color rgb< 1.0, 0.65, 0.0>}  finish { phong 1 reflection{ 0.00 metallic 0.00} } } 
+        rotate<0,-3,0> translate<-2.058,-0.05,-1.05> 
+    }  
+                  
+
+     texture { 
+        finish{ ambient 0.2 diffuse 0.6 reflection 0.05 specular 0.2 phong 0.5 phong_size 60 metallic }
+        pigment {color rgb<0.05,0.05,0.05>} 
+    }  
+ 
+}  
+
+object pedalTodo = merge {
+ object {pedivela} 
+ object {pedal}
+}
+  
+  

@@ -52,10 +52,10 @@ global_settings{ assumed_gamma 1.0 }
                             right    -x*image_width/image_height
                             look_at   <0 , 1.0 , 0.0>}
 
-#declare Camera_diagonal_traseira_direita = camera {angle 30     
-                            location  <12 , 2 , -10>
+#declare Camera_diagonal_traseira_direita = camera {angle 10     
+                            location  <13 , 2.25 , -10>
                             right    -x*image_width/image_height
-                            look_at   <0 , 1 , 0.0>}
+                            look_at   <-2 , 0.8 , 0.0>}
                                                         
                             
 #declare Camera_pneu_traseiro = camera {angle 15     
@@ -914,12 +914,12 @@ box { <-34, 0.00, -1000>,< -4, 0.002, 1000>
    #local fim = -100.5;
           
    #while(i < 200)
-        box { <-15, 0, inicio>,< -15.5, 0.003, fim>                            
+        box { <-15, 0, inicio>,< -15.25, 0.003, fim>                            
                                                
       texture{ pigment{ color rgb< 1.0, 0.65, 0.0>}
                normal { bumps 0.5 scale 0.005}
                finish { phong 0.1}
-             } // end of texture
+             }
 
       scale <1,1,1> rotate<0,90,0> translate<0,0,0> 
     } 

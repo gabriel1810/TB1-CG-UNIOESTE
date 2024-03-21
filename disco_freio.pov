@@ -62,12 +62,10 @@ sky_sphere{ pigment{ gradient <0,1,0>
           
  #declare disco_freio = union{                    
         difference{
-            difference{                
-                difference{  
-                    difference{
+            difference{     
                         cylinder { <0,0,0.01>,<0,0,-0.01>,0.18} 
                         cylinder { <0,0,0.02>,<0,0,-0.02>,0.12}
-                    }           
+                             
                     
                     #local angulo = 0; 
                     #local totalEsferas = 12;
@@ -89,8 +87,7 @@ sky_sphere{ pigment{ gradient <0,1,0>
                         #declare angulo = angulo + 30;
                         #declare i = i + 1;
                     #end  
-        
-            } 
+             
                 #local angulo = 0; 
                 #local totalEsferas = 36;
                 #local i = 0;

@@ -72,7 +72,7 @@ global_settings{ assumed_gamma 1.0 }
                             look_at   <0 , 0 , 0>} 
                                                                    
                                        
-camera{camera_traseira_diagona_esquerda }
+camera{camera_0_0_0_esquerda }
 //------------------------------------------------------------------------
 // sun -------------------------------------------------------------------
 light_source{<1500,2500, 2500> color White}
@@ -127,10 +127,10 @@ sky_sphere{ pigment{ gradient <0,1,0>
         scale<6,1,1> rotate <0,90,0>} 
         cylinder{<0,0,-tamanhoGuidao>,<0,0,tamanhoGuidao> grosGuidao}
         merge{
-          cylinder{<0,0,0>, <1.5,0,0> grosGuidao + (grosGuidao*0.1)
-          translate <0.01,0,0> rotate<0,0,-20>}   
-          cylinder{<0,0,0>,<0,0.8,0> grosGuidao + (grosGuidao*0.3) translate<1.5,-1.15,0>}
-          sphere{ <0,0,0>, grosGuidao + (grosGuidao*0.3)translate<1.5,-0.35,0>}                         
+          cylinder{<0,0,0>, <0.95,0,0> grosGuidao + (grosGuidao*0.1)
+          translate <0.01,0,0> }   
+          cylinder{<0,0,0>,<0,0.8,0> grosGuidao + (grosGuidao*0.2) translate<0.95,-0.7,0>}
+          sphere{ <0,0,0>, grosGuidao + (grosGuidao*0.2)translate<0.95,0.1,0>}                         
         }
         
         
@@ -140,7 +140,9 @@ sky_sphere{ pigment{ gradient <0,1,0>
     }
 
 }  
-
+  
+  
+object{guidao}
 
 
 
